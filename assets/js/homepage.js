@@ -2,15 +2,13 @@ var authorFormEl = document.querySelector("#author-form");
 var authorInputEl = document.querySelector("#author");
 var bookContainerEl = document.querySelector("#books-container");
 
-
-
 var formSubmitHandler = function(event) {
     event.preventDefault();
     // get value from input element
     var authorname = authorInputEl.value.trim();
   
     if (authorname) {
-    getUserBooks(authorname);
+    getAuthorBooks(authorname);
     authorFormEl.value = "";
     } else {
     alert("Please enter the name of an author");
@@ -44,7 +42,7 @@ fetch(apiUrl)
 
   }
 
-  var getUserBooks = function(author) {
+  var getAuthorBooks = function(author) {
 
   var apiUrl = "https://openlibrary.org/search/authors.json?q=" + author;
 
