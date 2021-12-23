@@ -103,7 +103,7 @@ var formSubmitHandler = function(event) {
   authorWorks.authorName = author
   authorWorks.authorID = authorKey
 
-  var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=200";
+  var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=10";
 
 fetch(apiUrl)
   .then(function(response) {
@@ -134,11 +134,15 @@ fetch(apiUrl)
             title: null,
             subject: null,
           }
+          var bookSubject = ""
+          var bookSubjectQuery = ""
           if (data.entries[i].subjects) {
-            var bookSubjectQuery = encodeURIComponent(data.entries[i].subjects[0].replace(/-/g,'').trim());
-            var bookSubject = data.entries[i].subjects[0].replace(/-/g,'').trim();
+            for (let z = 0; z < data.entries[i].subjects.length; z++) {
+            bookSubjectQuery += encodeURIComponent(data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ");
+            bookSubject += data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ";
+          }
+          work.subject =  bookSubject.replace(/,\s*$/, "")
             work.title = bookString
-            work.subject =  bookSubject
             authorWorks.works.push(work)
           } else {
             var bookSubjectQuery = "\"\""
