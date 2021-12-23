@@ -1,14 +1,18 @@
 var authorFormEl = document.querySelector("#author-form");
 var authorInputEl = document.querySelector("#author");
+var bookResultsEl = document.querySelector("#book-results");
 var bookContainerEl = document.querySelector("#books-container");
+var entries = ""
 var bookInfoEl = ""
 var bookPublisher = ""
 var bookDate = ""
 
+
+
 var getBookInfo = function(bookID) {
 
   // var apiUrl = "https://openlibrary.org/api/books?bibkeys=OLID:" + bookID + "&format=json";
-  var apiUrl = "https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json";
+  var apiUrl = "https://noahs-server-proj1.herokuapp.com/https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json"
 
   fetch(apiUrl)
   .then(function(response) {
@@ -39,7 +43,6 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        console.log('DATA ', data)
 
         var bookAvailabilityEl = document.createElement("p");
         var bookListEl = document.createElement("ol");
@@ -47,21 +50,21 @@ fetch(apiUrl)
           var bookID = data.docs[i].seed[0].replace("/books/", "")
           
           var bookInstanceEl = document.createElement("li");
-          // if (data.docs[i].isbn) {
-          //   var bookISBN = data.docs[i].isbn[0]
-          //   bookInstanceEl.setAttribute("data-ISBN", bookISBN) 
-          // }
-          // var bookPublisher = data.docs[i].publisher[0]
-          // if (bookPublisher.indexOf(',') > -1) 
-          // {bookPublisher = bookPublisher.substring(1, bookPublisher.indexOf(',')) }
-          // if (data.docs[i].id_goodreads) {
-          //   bookInstanceEl.setAttribute("data-goodreads", data.docs[i].id_goodreads)
-          // }
+          if (data.docs[i].isbn) {
+            var bookISBN = data.docs[i].isbn[0]
+            bookInstanceEl.setAttribute("data-ISBN", bookISBN) 
+          }
+          var bookPublisher = data.docs[i].publisher[0]
+          if (bookPublisher.indexOf(',') > -1) 
+          {bookPublisher = bookPublisher.substring(1, bookPublisher.indexOf(',')) }
+          if (data.docs[i].id_goodreads) {
+            bookInstanceEl.setAttribute("data-goodreads", data.docs[i].id_goodreads)
+          }
 
-          getBookInfo(bookID)
+          // getBookInfo(bookID)
 
           bookInstanceEl.setAttribute("data-OLID", bookID)
-          // bookInstanceEl.textContent = bookPublisher + " (" + publishDates + ")"
+          bookInstanceEl.textContent = bookPublisher
           bookListEl.appendChild(bookInstanceEl)
           bookAvailabilityEl.appendChild(bookListEl)
         }
@@ -92,6 +95,13 @@ var formSubmitHandler = function(event) {
   };
 
   var displayBooks = function(author, authorKey) {
+    var authorWorks = {
+    authorName: null,
+    authorID: null,
+    works: []
+    }
+  authorWorks.authorName = author
+  authorWorks.authorID = authorKey
 
   var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=200";
 
@@ -100,25 +110,63 @@ fetch(apiUrl)
     if (response.ok) {
       response.json().then(function(data) {
         // console.log(data);
-        // do something here
+        bookResultsEl.innerHTML = ""
+        var bookResultsUpdate = $(bookResultsEl)
+        var booksContainerEl = $("<div>")
+        .attr("id", "books-container")
+        .addClass("list-group")
+        var entries = data.size
+        var foundEntriesEl = $("<h2>")
+        .addClass('card-header')
+        .attr('id', 'found-entries')
+        .text(" works found:")
+        var numberEntriesEl = $("<span>")
+        .attr('id', 'number-entries')
+        .addClass('number-entries')
+        .text(entries)
+        foundEntriesEl.prepend(numberEntriesEl)
+        bookResultsUpdate.append(foundEntriesEl, booksContainerEl)
         for (let i = 0; i < data.entries.length; i++) {
-            var bookEl = document.createElement("p");
-            var bookName = data.entries[i].title;
-            var bookString = encodeURIComponent(data.entries[i].title.replace(/-/g,'').trim())
-            if (data.entries[i].subjects) {
-            var bookSubject = encodeURIComponent(data.entries[i].subjects[0].replace(/-/g,'').trim());
-            } else {
-              var bookSubject = "\"\""
-            }
-            var bookAuthor = author.toLowerCase().replaceAll(" ", "+")
-            bookEl.setAttribute("id", "work-" + i)
-            bookEl.textContent = bookName;
-            bookContainerEl.appendChild(bookEl);
-            bookInfoEl = document.querySelector("#work-" + i);
-            getBookAvailability(bookAuthor, bookString, bookSubject, bookInfoEl)
+          var bookName = data.entries[i].title;
+          var bookStringQuery = encodeURIComponent(data.entries[i].title.replace(/-/g,'').trim())
+          var bookString = data.entries[i].title.replace(/-/g,'').trim()
+          var work = {
+            title: null,
+            subject: null,
+          }
+          if (data.entries[i].subjects) {
+            var bookSubjectQuery = encodeURIComponent(data.entries[i].subjects[0].replace(/-/g,'').trim());
+            var bookSubject = data.entries[i].subjects[0].replace(/-/g,'').trim();
+            work.title = bookString
+            work.subject =  bookSubject
+            authorWorks.works.push(work)
+          } else {
+            var bookSubjectQuery = "\"\""
+            work.title = bookString
+            work.subject =  ""
+            authorWorks.works.push(work)
+          }
+          var bookAuthor = author.toLowerCase().replaceAll(" ", "+")
+          
+          // getBookAvailability(bookAuthor, bookString, bookSubject, bookInfoEl)
         }
-        // Sort results alphabetically or by date published
-
+        authorWorks.works.sort(function(a, b) {
+          return ((a.title < b.title) ? -1 : ((a.title == b.title) ? 0 : 1));
+        });
+        var bookContainerEl = document.querySelector("#books-container");
+        bookContainerEl.innerHTML = ""
+        var bookTitles = $(bookContainerEl)  
+        for (var i = 0; i < authorWorks.works.length; i++) {
+          var bookEl = $("<h3>")
+          .addClass('title')
+          .attr("id", "work-" + i)
+          .text(authorWorks.works[i].title)
+          var bookSubjectEl = $("<p>")
+          .addClass('subject')
+          .attr("id", "subject-" + i)
+          .text("Subjects: " + authorWorks.works[i].subject) 
+          bookTitles.append(bookEl, bookSubjectEl);
+          } 
       });
     } else {
       alert("Error: " + author + "'s books not found at Open Library");
@@ -138,9 +186,7 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        // console.log(data);
         var authorKey = data.docs[0].key;
-        // do something here
         displayBooks(author, authorKey);
       });
     } else {
