@@ -6,6 +6,21 @@ var entries = ""
 var bookInfoEl = ""
 var bookPublisher = ""
 var bookDate = ""
+var authorIndex = ""
+var authorKey = ""
+var entries = ""
+var links = ""
+var startIndex = ""
+var endIndex = ""
+var totalIndex = ""
+var previousLink = ""
+var nextLink = ""
+var highestOffset = ""
+var bookStringQuery = ""
+var bookSubjectQuery = ""
+var bookAuthor = ""
+var title = ""
+var onclickArgument = ""
 
 
 
@@ -18,11 +33,14 @@ var getBookInfo = function(bookID) {
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        console.log(data);
-        // bookPublisher = data.records./books/bookID.data.publishers.name
-        // bookDate = data.records./books/bookID.publishDates
-        // console.log(bookPublisher);
-        // console.log(publishDates);
+        // console.log(data);
+        const bookPublisher = data.records["/books/" + bookID].data.publishers[0].name
+        const bookDate = data.records["/books/" + bookID].publishDates 
+        return {
+          bookPublisher,
+          bookDate
+      };
+        console.log(bookDate);
       });
     } else {
       alert("Error: " + bookID + " not found at Open Library");
@@ -35,15 +53,23 @@ var getBookInfo = function(bookID) {
 
 }
 
-var getBookAvailability = function(bookAuthor, bookString, bookSubject, bookInfoEl) {
+var getBookAvailability = function(event) {
 
-var apiUrl = "https://openlibrary.org/search.json?author=" + bookAuthor + "&title=" + bookString + "&subject=" + bookSubject;
+  var bookName = event.target.getAttribute("data-book-name")
+  var bookAuthor = event.target.getAttribute("data-book-Author")
+  var bookSubject = event.target.getAttribute("data-Subject-Query")
+
+var apiUrl = "https://openlibrary.org/search.json?author=" + bookAuthor + "&title=" + bookName + "&subject=" + bookSubject;
 
 fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-
+        console.log(data);
+        bookResultsEl.innerHTML = ""
+        var bookResultsUpdate = $(bookResultsEl)
+        var bookTitleEl = $("<h3>")
+        .text(bookName.replaceAll("+", " "))
         var bookAvailabilityEl = document.createElement("p");
         var bookListEl = document.createElement("ol");
         for (let i = 0; i < data.docs.length; i++) {
@@ -61,14 +87,17 @@ fetch(apiUrl)
             bookInstanceEl.setAttribute("data-goodreads", data.docs[i].id_goodreads)
           }
 
-          // getBookInfo(bookID)
+          getBookInfo(bookID)
 
+          if(!bookDate) {
+            bookDate = data.docs[0].publish_date
+          }
           bookInstanceEl.setAttribute("data-OLID", bookID)
-          bookInstanceEl.textContent = bookPublisher
+          bookInstanceEl.textContent = bookPublisher + " (" + bookDate + ")"
           bookListEl.appendChild(bookInstanceEl)
           bookAvailabilityEl.appendChild(bookListEl)
         }
-        bookInfoEl.appendChild(bookAvailabilityEl);
+        bookResultsUpdate.append(bookTitleEl, bookAvailabilityEl);
       });
     } else {
       alert("Error: " + bookID + " not found at Open Library");
@@ -83,7 +112,6 @@ fetch(apiUrl)
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
-    // get value from input element
     var authorname = authorInputEl.value.trim();
   
     if (authorname) {
@@ -94,7 +122,66 @@ var formSubmitHandler = function(event) {
     }
   };
 
-  var displayBooks = function(author, authorKey) {
+  var incrementIndex = function() {
+    authorIndex = (authorIndex + 10)
+    displayBooks(author, authorKey, authorIndex);
+  }
+
+  var decrementIndex = function() {
+    authorIndex = (authorIndex - 10)
+    displayBooks(author, authorKey, authorIndex);
+  }
+
+  var getPageNumbers = function(entries, authorIndex, links, highestOffset) {
+    var bookResultsUpdate = $(bookResultsEl)
+    if (entries > 10) {
+      if (authorIndex === highestOffset) {
+        endIndex = entries
+      } else {
+        endIndex = (authorIndex + 10)
+      }
+      startIndex = (authorIndex + 1)
+      var pageNavEl = $("<div>")
+        .addClass('card-header')
+        .attr('id', 'found-entries')
+      var pagesEl = $("<p>")
+        .text(startIndex + " to " + endIndex + " of " + entries + " results ")
+        var previousLinkEl = $("<span>")
+        .html('<i class="fas fa-angle-left fa-3x"></i>')
+        .attr('id', 'previous-page')
+        if (authorIndex > 0) {
+          previousLinkEl.attr('tabindex', "0");
+          previousLinkEl.attr('onclick', 'decrementIndex()')
+          previousLinkEl.attr('onkeypress', 'decrementIndex()')
+          }
+        var nextLinkEl = $("<span>")
+        .attr('id', 'next-page')
+        .html('<i class="fas fa-angle-right fa-3x"></i>')
+        if (authorIndex < highestOffset) {
+        nextLinkEl.attr('tabindex', "0");
+        nextLinkEl.attr('onclick', 'incrementIndex()')
+        nextLinkEl.attr('onkeypress', 'incrementIndex()')
+        }
+        pagesEl.append(previousLinkEl, nextLinkEl)
+        pageNavEl.append(pagesEl)
+        previousLink = document.getElementById('previous-page');
+        nextLink = document.getElementById('next-page');
+        bookResultsUpdate.append(pageNavEl)
+    } else {
+      startIndex = 1
+      endIndex = entries
+      var pageNavEl = $("<div>")
+      .addClass('card-header')
+      .attr('id', 'found-entries')
+      var pagesEl = $("<p>")
+        .text(startIndex + " to " + endIndex + " of " + entries + " results ")
+        pageNavEl.append(pagesEl)
+        bookResultsUpdate.append(pageNavEl)
+    }
+
+  }
+
+  var displayBooks = function(author, authorKey, authorIndex) {
     var authorWorks = {
     authorName: null,
     authorID: null,
@@ -102,40 +189,35 @@ var formSubmitHandler = function(event) {
     }
   authorWorks.authorName = author
   authorWorks.authorID = authorKey
-
-  var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=10";
-
+  if (!bookAuthor) {
+  bookAuthor = author.toLowerCase().replaceAll(" ", "+")
+  }
+  var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=10&offset=" + authorIndex;
 fetch(apiUrl)
-  .then(function(response) {
-    if (response.ok) {
-      response.json().then(function(data) {
-        // console.log(data);
-        bookResultsEl.innerHTML = ""
+.then(function(response) {
+  if (response.ok) {
+    response.json().then(function(data) {
+      // console.log(data);
+      bookResultsEl.innerHTML = ""
         var bookResultsUpdate = $(bookResultsEl)
         var booksContainerEl = $("<div>")
         .attr("id", "books-container")
         .addClass("list-group")
-        var entries = data.size
-        var foundEntriesEl = $("<h2>")
-        .addClass('card-header')
-        .attr('id', 'found-entries')
-        .text(" works found:")
-        var numberEntriesEl = $("<span>")
-        .attr('id', 'number-entries')
-        .addClass('number-entries')
-        .text(entries)
-        foundEntriesEl.prepend(numberEntriesEl)
-        bookResultsUpdate.append(foundEntriesEl, booksContainerEl)
+        entries = data.size
+        highestOffset = (Math.floor(entries/10) * 10)
+        links = data.links
+        getPageNumbers(entries, authorIndex, links, highestOffset)
+        bookResultsUpdate.append(booksContainerEl)
         for (let i = 0; i < data.entries.length; i++) {
-          var bookName = data.entries[i].title;
-          var bookStringQuery = encodeURIComponent(data.entries[i].title.replace(/-/g,'').trim())
+          // var bookName = data.entries[i].title;
+          bookStringQuery = encodeURIComponent(data.entries[i].title.replace(/-/g,'').trim())
           var bookString = data.entries[i].title.replace(/-/g,'').trim()
           var work = {
             title: null,
             subject: null,
           }
           var bookSubject = ""
-          var bookSubjectQuery = ""
+          bookSubjectQuery = ""
           if (data.entries[i].subjects) {
             for (let z = 0; z < data.entries[i].subjects.length; z++) {
             bookSubjectQuery += encodeURIComponent(data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ");
@@ -145,14 +227,11 @@ fetch(apiUrl)
             work.title = bookString
             authorWorks.works.push(work)
           } else {
-            var bookSubjectQuery = "\"\""
+            bookSubjectQuery = "\"\""
             work.title = bookString
             work.subject =  ""
             authorWorks.works.push(work)
           }
-          var bookAuthor = author.toLowerCase().replaceAll(" ", "+")
-          
-          // getBookAvailability(bookAuthor, bookString, bookSubject, bookInfoEl)
         }
         authorWorks.works.sort(function(a, b) {
           return ((a.title < b.title) ? -1 : ((a.title == b.title) ? 0 : 1));
@@ -161,16 +240,40 @@ fetch(apiUrl)
         bookContainerEl.innerHTML = ""
         var bookTitles = $(bookContainerEl)  
         for (var i = 0; i < authorWorks.works.length; i++) {
+          bookName = authorWorks.works[i].title.replaceAll(" ", "+")
+          bookSubjectQuery = authorWorks.works[i].subject.toLowerCase().replaceAll(" ", "+")
+          // onclickArgument = "getBookAvailability(" + bookName + ", " + bookAuthor + ", " + bookStringQuery + ", " + bookSubjectQuery + ")"
           var bookEl = $("<h3>")
           .addClass('title')
           .attr("id", "work-" + i)
+          var bookLink = $("<a>")
+          .attr("data-book-name", bookName)
+          .attr("data-book-Author", bookAuthor)
+          .attr("data-Subject-Query", bookSubjectQuery)
+          .attr("href", "#")
           .text(authorWorks.works[i].title)
-          var bookSubjectEl = $("<p>")
-          .addClass('subject')
-          .attr("id", "subject-" + i)
-          .text("Subjects: " + authorWorks.works[i].subject) 
+          if (authorWorks.works[i].subject === "") {
+            var bookSubjectEl = $("<p>")
+            .addClass('subject')
+            .attr("id", "subject-" + i)
+            .text("No subjects listed") 
+          } else {
+            var bookSubjectEl = $("<p>")
+            .addClass('subject')
+            .attr("id", "subject-" + i)
+            .text("Subjects: " + authorWorks.works[i].subject) 
+          }
+          bookEl.append(bookLink)
+          bookLink.attr("data-Subject-Query", bookSubjectQuery)  
           bookTitles.append(bookEl, bookSubjectEl);
-          } 
+        } 
+          var bottomNavEl = document.querySelector("#found-entries");
+          var clone = bottomNavEl.cloneNode(true)
+          clone.setAttribute("id", "bottom-nav")
+          var updateResultsEl = $(bookResultsEl) 
+          updateResultsEl.append(clone)
+          localStorage.setItem("authorWorks", JSON.stringify(authorWorks));
+          bookContainerEl.addEventListener("click", getBookAvailability);
       });
     } else {
       alert("Error: " + author + "'s books not found at Open Library");
@@ -190,8 +293,9 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        var authorKey = data.docs[0].key;
-        displayBooks(author, authorKey);
+        authorKey = data.docs[0].key;
+        authorIndex = 0
+        displayBooks(author, authorKey, authorIndex);
       });
     } else {
       alert("Error: Author Not Found");
