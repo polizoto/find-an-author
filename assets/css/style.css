@@ -1,0 +1,10 @@
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0px; 
+}
+li:not(:first-child)::before{
+    content: "\00BB";
+    padding: 10px;
+}
