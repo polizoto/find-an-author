@@ -110,6 +110,7 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
+        console.log(data);
         bookResultsEl.innerHTML = ""
         var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
@@ -122,6 +123,7 @@ fetch(apiUrl)
           var bookID = data.docs[i].seed[0].replace("/books/", "")
           var bookInstanceEl = $("<li>")
           var bookLinkEl = $("<a>")
+          var bookfullText = $("<span>")
           if (data.docs[i].isbn) {
             var bookISBN = data.docs[i].isbn[0]
             bookLinkEl.attr("data-ISBN", bookISBN) 
@@ -135,16 +137,24 @@ fetch(apiUrl)
 
           // getBookInfo(bookID)
 
-          if(!bookDate) {
-            bookDate = data.docs[0].publish_date
+          bookDate = data.docs[i].publish_year
+          editionNumber = data.docs[i].edition_count
+          isbnNumber = data.docs[i].isbn[0]
+
+          if (data.docs[i].has_fulltext) {
+            fullText = data.docs[i].has_fulltext
+          } else {
+            fullText = "false"
           }
+          bookfullText.text("( " + fullText + " )")
+          
           bookLinkEl.attr("data-OLID", bookID)
           bookLinkEl.attr("data-status", bookStatus)
           bookLinkEl.attr("href", "#")
-          bookLinkEl.text(bookPublisher + " (" + bookDate + ")")
+          bookLinkEl.text(bookPublisher + " (" + bookDate + ") " + editionNumber + " edition " + "(ISBN: " + isbnNumber + ")")
           bookEditions.editionName.push(bookLinkEl.text())
           bookEditions.editionID.push(bookID)
-          bookInstanceEl.append(bookLinkEl)
+          bookInstanceEl.append(bookLinkEl, bookfullText)
           bookListEl.append(bookInstanceEl)
           bookAvailabilityEl.append(bookListEl)
         }
