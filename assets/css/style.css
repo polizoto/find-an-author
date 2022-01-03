@@ -4,7 +4,7 @@
     list-style: none;
     padding: 0px; 
 }
-li:not(:first-child)::before{
+.breadcrumb li:not(:first-child)::before{
     content: "\00BB";
     padding: 10px;
 }

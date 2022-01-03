@@ -31,8 +31,17 @@ var breadCrumbNavList = ""
 
 var getBookInfo = function(event) {
   event.preventDefault();
+  var target = $( event.target );
+  if (target.is("a")) {
   bookID = event.target.getAttribute("data-OLID")
-
+  bookEdition = event.target.innerText
+  var editionStatus = {
+    editionName: [],
+    openLibrary: [],
+    goodReads: [],
+    googleBooks: []
+    }
+    editionStatus.editionName.push(bookEdition)
   // var apiUrl = "https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json";
   var apiUrl = "https://noahs-server-proj1.herokuapp.com/https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json"
 
@@ -45,16 +54,28 @@ var getBookInfo = function(event) {
         bookDate = data.records["/books/" + bookID].publishDates
         bookStatus = data.records["/books/" + bookID].details.preview;
         bookResultsEl.innerHTML = ""
+
+        editionStatus.openLibrary.push(bookStatus)
         var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
-        .text(bookName.replaceAll("+", " "))
-        var bookInfo = $("<p>")
+        .text(bookEdition.replaceAll("+", " "))
+        var openLibraryAvailability = $("<h4>")
+        .text("Open Library")
+        var openLibraryStatus = $("<p>")
+        .text(bookStatus)
+        openLibraryAvailability.append(openLibraryStatus)
+        var goodReads = $("<h4>")
+        .text("Good Reads")
         var breadCrumbNavListEdition = $("<li>")
-        .text(bookName.replaceAll("+", " "))
-        .attr("id", "book-name")
+        var editionLink = $("<a>")
+        .text(bookEdition.replaceAll("+", " "))
+        .attr("id", "edition-name")
+        .attr("href", "#")
+        breadCrumbNavListEdition.append(editionLink)
         breadCrumbNavList.append(breadCrumbNavListEdition)
-        console.log(bookStatus);
-        bookResultsUpdate.append(bookTitleEl);
+        localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
+        editionLink.on("click", breadCrumbLinkHandler);
+        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, goodReads);
       });
     } else {
       alert("Error: " + bookID + " not found at Open Library");
@@ -64,11 +85,13 @@ var getBookInfo = function(event) {
       console.log('error ', error)
      // alert("Unable to connect to Open Library API");
     });
-
+  }
 }
 
 var getBookAvailability = function(event) {
   event.preventDefault();
+  var target = $( event.target );
+  if (target.is("a")) {
   var bookEditions = {
     editionName: [],
     editionID: []
@@ -125,12 +148,16 @@ fetch(apiUrl)
           bookListEl.append(bookInstanceEl)
           bookAvailabilityEl.append(bookListEl)
         }
-        console.log(bookEditions);
         bookResultsUpdate.append(bookTitleEl, bookAvailabilityEl);
         var breadCrumbNavListBook = $("<li>")
+        var bookLink = $("<a>")
         .text(bookName.replaceAll("+", " "))
         .attr("id", "book-name")
+        .attr("href", "#")
+        breadCrumbNavListBook.append(bookLink)
         breadCrumbNavList.append(breadCrumbNavListBook)
+        localStorage.setItem("bookEditions", JSON.stringify(bookEditions));
+        bookLink.on("click", breadCrumbLinkHandler);
         bookListEl.on("click", getBookInfo);
       });
     } else {
@@ -140,17 +167,18 @@ fetch(apiUrl)
     .catch(function(error) {
       alert("Unable to connect to Open Library API");
     });
-
+  }
 }
 
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
+    $('#breadcrumb').remove()
     var authorname = authorInputEl.value.trim();
   
     if (authorname) {
     getAuthorBooks(authorname);
-    authorFormEl.value = "";
+    authorInputEl.value = '';
     } else {
     alert("Please enter the name of an author");
     }
@@ -219,6 +247,7 @@ var formSubmitHandler = function(event) {
     var authorWorks = {
     authorName: null,
     authorID: null,
+    entries: null,
     works: []
     }
   authorWorks.authorName = author
@@ -239,6 +268,7 @@ fetch(apiUrl)
         .attr("id", "books-container")
         .addClass("list-group")
         entries = data.size
+        authorWorks.entries = entries
         highestOffset = (Math.floor(entries/10) * 10)
         // links = data.links
         getPageNumbers(entries, authorIndex, highestOffset)
@@ -323,27 +353,121 @@ fetch(apiUrl)
 
   }
 
+  var breadCrumbLinkHandler = function(event) {
+    event.preventDefault();
+    bookResultsEl.innerHTML = ""
+    link = event.target.getAttribute("id")
+    if (link === "author-name") {
+      $('#book-name').parent().remove()
+      $('#edition-name').parent().remove()
+      authorWorks = JSON.parse(localStorage.getItem("authorWorks"));
+
+      var bookResultsUpdate = $(bookResultsEl)
+      var booksContainerEl = $("<div>")
+      .attr("id", "books-container")
+      .addClass("list-group")
+      entries = authorWorks.entries
+      highestOffset = (Math.floor(entries/10) * 10)
+      getPageNumbers(entries, authorIndex, highestOffset)
+      bookResultsUpdate.append(booksContainerEl)
+      var bookContainerEl = document.querySelector("#books-container");
+      bookContainerEl.innerHTML = ""
+      var bookTitles = $(bookContainerEl)  
+      for (var i = 0; i < authorWorks.works.length; i++) {
+        bookName = authorWorks.works[i].title.replaceAll(" ", "+")
+        bookSubjectQuery = authorWorks.works[i].subject.toLowerCase().replaceAll(" ", "+")
+        if (!bookSubjectQuery) {
+          bookSubjectQuery = null
+        }
+        var bookEl = $("<h3>")
+        .addClass('title')
+        .attr("id", "work-" + i)
+        var bookLink = $("<a>")
+        .attr("data-book-name", bookName)
+        .attr("data-book-author", bookAuthor)
+        .attr("data-subject-query", bookSubjectQuery)
+        .attr("href", "#")
+        .text(authorWorks.works[i].title)
+        if (authorWorks.works[i].subject === "") {
+          var bookSubjectEl = $("<p>")
+          .addClass('subject')
+          .attr("id", "subject-" + i)
+          .text("No subjects listed") 
+        } else {
+          var bookSubjectEl = $("<p>")
+          .addClass('subject')
+          .attr("id", "subject-" + i)
+          .text("Subjects: " + authorWorks.works[i].subject) 
+        }
+        bookEl.append(bookLink)
+        bookLink.attr("data-subject-query", bookSubjectQuery)  
+        bookTitles.append(bookEl, bookSubjectEl);
+      } 
+        var bottomNavEl = document.querySelector("#found-entries");
+        var clone = bottomNavEl.cloneNode(true)
+        clone.setAttribute("id", "bottom-nav")
+        var updateResultsEl = $(bookResultsEl) 
+        updateResultsEl.append(clone)
+        bookContainerEl.addEventListener("click", getBookAvailability);
+    }
+    if (link === "book-name") {
+      $('#edition-name').parent().remove()
+      bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
+
+      var bookResultsUpdate = $(bookResultsEl)
+        var bookTitleEl = $("<h3>")
+        .text(bookName.replaceAll("+", " "))
+        var bookAvailabilityEl = $("<p>")
+        var bookListEl = $("<ol>")
+        .attr('id', 'list-editions')
+        for (let i = 0; i < bookEditions.editionName.length; i++) {
+
+          var bookID = bookEditions.editionID[i]
+          var bookInstanceEl = $("<li>")
+          var bookLinkEl = $("<a>")
+          bookLinkEl.attr("data-OLID", bookID)
+          bookLinkEl.attr("href", "#")
+          bookLinkEl.text(bookEditions.editionName[i])
+          bookInstanceEl.append(bookLinkEl)
+          bookListEl.append(bookInstanceEl)
+          bookAvailabilityEl.append(bookListEl)
+        }
+        bookResultsUpdate.append(bookTitleEl, bookAvailabilityEl);
+        bookListEl.on("click", getBookInfo);
+    }
+    if (link === "edition-name") {
+      editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
+      
+    }
+  }
+
   var getAuthorBooks = function(authorname) {
-    authorFormEl.value = ""
+    authorFormEl.value = ''
   var apiUrl = "https://openlibrary.org/search/authors.json?q=" + authorname;
 
   fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
+        authorFormEl.value = ''
         authorKey = data.docs[0].key;
         authorIndex = 0
         author = authorname
         var bookResultsUpdate = $(bookResultsEl)
         breadCrumbNav = $("<div>")
+        .attr("id", "breadcrumb")
         breadCrumbNavList = $("<ol>")
         .addClass("breadcrumb")
         var breadCrumbNavListAuthor = $("<li>")
+        var authorLink = $("<a>")
         .text(author)
         .attr("id", "author-name")
+        .attr("href", "#")
+        breadCrumbNavListAuthor.append(authorLink)
         breadCrumbNavList.append(breadCrumbNavListAuthor)
         breadCrumbNav.append(breadCrumbNavList)
         bookResultsUpdate.before(breadCrumbNav)
+        authorLink.on("click", breadCrumbLinkHandler);
         displayBooks(author, authorKey, authorIndex);
       });
     } else {
