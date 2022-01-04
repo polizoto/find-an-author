@@ -497,7 +497,7 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        console.log(data);
+        // console.log(data)
         bookResultsEl.innerHTML = ""
         var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
