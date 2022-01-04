@@ -645,7 +645,7 @@ var formSubmitHandler = function(event) {
       var pagesEl = $("<p>")
         .text(startIndex + " to " + endIndex + " of " + entries + " results ")
         var previousLinkEl = $("<span>")
-        .html('<i class="fas fa-angle-left fa-3x"></i>')
+        .html('<i class="fas fa-angle-left fa-2x"></i>')
         .attr('id', 'previous-page')
         if (authorIndex > 0) {
           previousLinkEl.attr('tabindex', "0");
@@ -654,7 +654,7 @@ var formSubmitHandler = function(event) {
           }
         var nextLinkEl = $("<span>")
         .attr('id', 'next-page')
-        .html('<i class="fas fa-angle-right fa-3x"></i>')
+        .html('<i class="fas fa-angle-right fa-2x"></i>')
         if (authorIndex < highestOffset) {
         nextLinkEl.attr('tabindex', "0");
         nextLinkEl.attr('onclick', 'incrementIndex()')
