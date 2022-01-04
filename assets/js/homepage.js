@@ -102,6 +102,7 @@ var getSavedItem = function (event) {
         openLibraryLink
         .attr("dataOL-link", savedSearches[storageID].editionStatus.openLibrary.booklink)
         .attr("href", savedSearches[storageID].editionStatus.openLibrary.booklink)
+        .attr("target", "_blank")
         .text("(See on Open Library)")
         var openLibraryEl = $("<p>")
         if (bookStatus === "noview") {
@@ -161,12 +162,16 @@ var getSavedItem = function (event) {
           libraryThingDataLink
           .attr("data-link", savedSearches[storageID].editionStatus.libraryThing.booklink)
           .attr("href", savedSearches[storageID].editionStatus.libraryThing.booklink)
+          .attr("target", "_blank")
           .text("(See on LibraryThing)")
           libraryThingData
           .append(libraryThingDataCopies , " members have this book with " , libraryThingDataReviews , " reviews. It has a rating of " , libraryThingDataRating , ". " , libraryThingDataLink) 
+        } else {
+          var libraryThingData = $("<p>")
+          libraryThingData
+          .append("No members have this book!")
         }
-          // editionLink.on("click", breadCrumbLinkHandler);
-        } 
+        }
 
         bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, openLibraryEl, libraryThing);
         bookResultsUpdate.append(libraryThingData)
@@ -231,7 +236,7 @@ var getSavedItem = function (event) {
 }
 
 var saveSearch = function (event) {
-  event.preventDefault();
+  // event.preventDefault();
   authorWorks = JSON.parse(localStorage.getItem("authorWorks"));
   bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
   editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
@@ -242,7 +247,7 @@ var saveSearch = function (event) {
     savedSearches = JSON.parse(localStorage.getItem("savedSearches"));
     savedSearches.unshift(savedItem)
     if (savedSearches.length > 9) {
-      savedSearches.length[10].remove()
+      savedSearches.splice(-1)
     }
     localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
     } else {
@@ -287,12 +292,18 @@ function LT_link (booksInfo) {
         libraryThingDataLink
         .attr("data-link", book.link)
         .attr("href", book.link)
+        .attr("target", "_blank")
         .text("(See on LibraryThing)")
         var libraryIDEL = document.getElementById('LT_'+book.id);
         var libraryIDELUpdate = $(libraryIDEL)
         libraryIDELUpdate
         .append(libraryThingDataCopies , " members have this book with " , libraryThingDataReviews , " reviews. It has a rating of " , libraryThingDataRating , ". " , libraryThingDataLink)
-			}
+			} else {
+      var book = booksInfo[librarybookID];
+      var libraryIDEL = document.getElementById('LT_'+librarybookID);         
+      var libraryIDELUpdate = $(libraryIDEL)
+      libraryIDELUpdate.append("No members have this book!")
+      }
       editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
       editionStatus.libraryThing.bookID = book.id
       editionStatus.libraryThing.bookcopies = book.copies
@@ -301,7 +312,13 @@ function LT_link (booksInfo) {
       editionStatus.libraryThing.booklink = book.link
       localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
 		}
-	catch(e) { };
+	catch(e) {
+    var book = booksInfo[librarybookID];
+    var libraryIDEL = document.getElementById('LT_'+librarybookID);         
+    var libraryIDELUpdate = $(libraryIDEL)
+    libraryIDELUpdate.append("No members have this book!")
+    return
+  };
 	}
 }
 
@@ -335,9 +352,6 @@ var getBookInfo = function(event) {
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        // console.log(data);
-        // bookPublisher = data.records["/books/" + bookID].data.publishers[0].name
-        // bookDate = data.records["/books/" + bookID].publishDates
         bookStatus = data.records["/books/" + bookID].details.preview;
         bookResultsEl.innerHTML = ""
         var mainUpdate = $(mainEl)
@@ -351,6 +365,7 @@ var getBookInfo = function(event) {
         openLibraryLink
         .attr("dataOL-link", data.records["/books/" + bookID].details.info_url)
         .attr("href", data.records["/books/" + bookID].details.info_url)
+        .attr("target", "_blank")
         .text("(See on Open Library)")
         editionStatus.openLibrary.bookID = bookID
         editionStatus.openLibrary.bookstatus = bookStatus
@@ -396,7 +411,6 @@ var getBookInfo = function(event) {
         .attr("href", "#")
         breadCrumbNavListEdition.append(editionLink)
         breadCrumbNavList.append(breadCrumbNavListEdition)
-        // editionLink.on("click", breadCrumbLinkHandler);
         var saveResultsEl = $("<div>")
         saveResultsEl
         .attr("id", "save-results")
@@ -427,20 +441,32 @@ var getBookInfo = function(event) {
         bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, openLibraryEl, libraryThing);
         mainUpdate.append(saveResultsEl)
         localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
+        bookResultsUpdate.append(libraryThingData)
         if (libraryID) {
-          bookResultsUpdate.append(libraryThingData)
           var libraryJS = $("<script>")
           .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
           bodyUpdate.append(libraryJS);
+        } else {
+          libraryThingData.append("No members have this book!")
         }
       });
     } else {
-      alert("Error: " + bookID + " not found at Open Library");
+      // alert("Error: " + bookID + " not found at Open Library");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Error: " + bookID + " not found at Open Library"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     }
   })
     .catch(function(error) {
       console.log('error ', error)
      // alert("Unable to connect to Open Library API");
+     var modalMessage = document.querySelector("#modal-message");
+     modalMessage.textContent = "Unable to connect to Open Library API"
+     modal.callOpen
+     modal.opener = document.activeElement
+     openModal()
     });
   }
 }
@@ -459,7 +485,7 @@ var getBookAvailability = function(event) {
     }
 
   bookName = event.target.getAttribute("data-book-name")
-  bookAuthor = event.target.getAttribute("data-book-Author")
+  bookAuthor = event.target.getAttribute("data-book-author")
   bookSubject = event.target.getAttribute("data-subject-query")
 
   if (bookSubject = "null") {
@@ -485,10 +511,6 @@ fetch(apiUrl)
           var bookInstanceEl = $("<li>")
           var bookLinkEl = $("<a>")
           var bookfullText = $("<span>")
-          // if (data.docs[i].isbn) {
-          //   var bookISBN = data.docs[i].isbn[0]
-          //   bookLinkEl.attr("data-ISBN", bookISBN) 
-          // }
           var bookPublisher = data.docs[i].publisher[0]
           if (bookPublisher.indexOf(',') > -1) 
           {bookPublisher = bookPublisher.substring(1, bookPublisher.indexOf(',')) }
@@ -496,8 +518,6 @@ fetch(apiUrl)
             var goodReadsID = data.docs[i].id_goodreads
             bookLinkEl.attr("data-goodreads", goodReadsID)
           }
-
-          // getBookInfo(bookID)
 
           bookDate = data.docs[i].publish_year
           editionNumber = data.docs[i].edition_count
@@ -511,6 +531,7 @@ fetch(apiUrl)
             bookLinkEl.attr("data-ISBN", data.docs[i].lccn)
           } else {
             bookNumberType = "No Record"
+            bookNumber = "none"
           }
 
           if (data.docs[i].has_fulltext) {
@@ -551,11 +572,21 @@ fetch(apiUrl)
         bookListEl.on("click", getBookInfo);
       });
     } else {
-      alert("Error: " + bookID + " not found at Open Library");
+      // alert("Error: " + bookID + " not found at Open Library");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Error: " + bookID + " not found at Open Library"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     }
   })
     .catch(function(error) {
-      alert("Unable to connect to Open Library API");
+      // alert("Unable to connect to Open Library API");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Unable to connect to Open Library API"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     });
   }
 }
@@ -570,16 +601,31 @@ var formSubmitHandler = function(event) {
     getAuthorBooks(authorname);
     authorInputEl.value = '';
     } else {
-    alert("Please enter the name of an author");
+    var modalMessage = document.querySelector("#modal-message");
+    modalMessage.textContent = "You must enter the name of an author."
+    modal.callOpen
+    modal.opener = document.activeElement
+    openModal()
     }
   };
 
   var incrementIndex = function() {
+    if (!authorIndex){
+    var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
+    author = authorWorks.authorName
+    authorIndex = authorWorks.authorIndex
+    bookResultsEl.innerHTML = ""
+    }
     authorIndex = (authorIndex + 10)
     displayBooks(author, authorKey, authorIndex);
   }
 
   var decrementIndex = function() {
+    if (!authorIndex){
+      var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
+      author = authorWorks.authorName
+      authorIndex = authorWorks.authorIndex
+      }
     authorIndex = (authorIndex - 10)
     displayBooks(author, authorKey, authorIndex);
   }
@@ -634,42 +680,44 @@ var formSubmitHandler = function(event) {
   }
 
   var displayBooks = function(author, authorKey, authorIndex) {
+    if (!authorKey) {
+      var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
+      var authorKey = authorWorks.authorID
+      // var authorIndex = authorWorks.authorIndex
+    }
     var authorWorks = {
     authorName: null,
     authorID: null,
     entries: null,
+    authorIndex: null,
     works: []
     }
   authorWorks.authorName = author
-  // console.log(authorWorks.authorName);
   authorWorks.authorID = authorKey
-  // if (!bookAuthor) {
-    if (!author) {
-      authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
-      bookAuthor = authorWorks.authorName
-    } else {
-  bookAuthor = author.toLowerCase().replaceAll(" ", "+")
-    }
-  // }
+  authorWorks.authorIndex = authorIndex
+
+    var bookAuthor = author.replaceAll(" ", "+")
+
   var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=10&offset=" + authorIndex;
 fetch(apiUrl)
 .then(function(response) {
   if (response.ok) {
     response.json().then(function(data) {
-      // console.log(data);
+      var bookResultsEl = document.querySelector("#book-results");
       bookResultsEl.innerHTML = ""
+      var booksContainerElUpdate = $("#books-container")
+      booksContainerElUpdate.html("")
         var bookResultsUpdate = $(bookResultsEl)
+        bookResultsUpdate.html("")
         var booksContainerEl = $("<div>")
         .attr("id", "books-container")
         .addClass("list-group")
         entries = data.size
         authorWorks.entries = entries
         highestOffset = (Math.floor(entries/10) * 10)
-        // links = data.links
         getPageNumbers(entries, authorIndex, highestOffset)
         bookResultsUpdate.append(booksContainerEl)
         for (let i = 0; i < data.entries.length; i++) {
-          // var bookName = data.entries[i].title;
           bookStringQuery = encodeURIComponent(data.entries[i].title.replace(/-/g,'').trim())
           var bookString = data.entries[i].title.replace(/-/g,'').trim()
           var work = {
@@ -680,9 +728,9 @@ fetch(apiUrl)
           bookSubjectQuery = ""
           if (data.entries[i].subjects) {
             for (let z = 0; z < data.entries[i].subjects.length; z++) {
-            bookSubjectQuery += encodeURIComponent(data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ");
-            bookSubject += data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ";
-          }
+              bookSubjectQuery += encodeURIComponent(data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ");
+              bookSubject += data.entries[i].subjects[z].replace(/-/g,'').trim() + ", ";
+            }
             work.subject =  bookSubject.replace(/,\s*$/, "")
             work.title = bookString
             authorWorks.works.push(work)
@@ -700,12 +748,12 @@ fetch(apiUrl)
         bookContainerEl.innerHTML = ""
         var bookTitles = $(bookContainerEl)  
         for (var i = 0; i < authorWorks.works.length; i++) {
+          bookAuthor = authorWorks.authorName.replaceAll(" ", "+")
           bookName = authorWorks.works[i].title.replaceAll(" ", "+")
           bookSubjectQuery = authorWorks.works[i].subject.toLowerCase().replaceAll(" ", "+")
           if (!bookSubjectQuery) {
             bookSubjectQuery = null
           }
-          // onclickArgument = "getBookAvailability(" + bookName + ", " + bookAuthor + ", " + bookStringQuery + ", " + bookSubjectQuery + ")"
           var bookEl = $("<h3>")
           .addClass('title')
           .attr("id", "work-" + i)
@@ -739,11 +787,21 @@ fetch(apiUrl)
           bookContainerEl.addEventListener("click", getBookAvailability);
       });
     } else {
-      alert("Error: " + author + "'s books not found at Open Library");
+      // alert("Error: " + author + "'s books not found at Open Library");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Error: " + author + "'s books not found at Open Library"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     }
   })
     .catch(function(error) {
-      alert("Unable to connect to Open Library API");
+      // alert("Unable to connect to Open Library API");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Unable to connect to Open Library API"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     });
 
   }
@@ -764,12 +822,19 @@ fetch(apiUrl)
       .addClass("list-group")
       entries = authorWorks.entries
       highestOffset = (Math.floor(entries/10) * 10)
+      if (!authorIndex){
+        var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
+        author = authorWorks.authorName
+        authorIndex = authorWorks.authorIndex
+        }
       getPageNumbers(entries, authorIndex, highestOffset)
       bookResultsUpdate.append(booksContainerEl)
+      var bookAuthor = authorWorks.authorName.replaceAll(" ", "+")
       var bookContainerEl = document.querySelector("#books-container");
       bookContainerEl.innerHTML = ""
       var bookTitles = $(bookContainerEl)  
       for (var i = 0; i < authorWorks.works.length; i++) {
+        bookAuthor = authorWorks.authorName.replaceAll(" ", "+")
         bookName = authorWorks.works[i].title.replaceAll(" ", "+")
         bookSubjectQuery = authorWorks.works[i].subject.toLowerCase().replaceAll(" ", "+")
         if (!bookSubjectQuery) {
@@ -872,11 +937,21 @@ fetch(apiUrl)
         displayBooks(author, authorKey, authorIndex);
       });
     } else {
-      alert("Error: Author Not Found");
+      // alert("Error: Author Not Found");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Error: Author Not Found"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     }
   })
     .catch(function(error) {
-      alert("Unable to connect to Open Library API");
+      // alert("Unable to connect to Open Library API");
+      var modalMessage = document.querySelector("#modal-message");
+      modalMessage.textContent = "Unable to connect to Open Library API"
+      modal.callOpen
+      modal.opener = document.activeElement
+      openModal()
     });
 };  
 
