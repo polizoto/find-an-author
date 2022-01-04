@@ -70,3 +70,13 @@ body {
   content: "\00BB";
   padding: 10px;
 }
+
+.library-thing {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.open-library {
+    font-weight: bold;
+    font-style: italic;
+}

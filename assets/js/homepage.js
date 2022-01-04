@@ -1,9 +1,12 @@
 var mainEl = document.querySelector("#main");
+var searchEl = document.querySelector("#search");
 var bodyEl = document.querySelector("#body");
 var authorFormEl = document.querySelector("#author-form");
 var authorInputEl = document.querySelector("#author");
 var bookResultsEl = document.querySelector("#book-results");
 var bookContainerEl = document.querySelector("#books-container");
+var savedItemsEl = document.querySelector("#saved-items");
+var data_Copies = document.querySelector("#data-copies")
 var entries = ""
 var bookInfoEl = ""
 var bookPublisher = ""
@@ -28,19 +31,275 @@ var title = ""
 var onclickArgument = ""
 var breadCrumbNav = ""
 var breadCrumbNavList = ""
+var newBookID = ""
+
+var clearSearchForm = function () {
+  localStorage.removeItem("savedSearches")
+}
+
+var getSavedItem = function (event) {
+  event.preventDefault();
+  var target = $( event.target );
+  if (target.is("button")) {
+    storageID = event.target.getAttribute("data-storage-item")
+    savedSearches = JSON.parse(localStorage.getItem("savedSearches"));
+    localStorage.removeItem("authorWorks")
+    localStorage.removeItem("bookEditions")
+    localStorage.removeItem("editionStatus")
+    authorWorks = savedSearches[storageID].authorWorks
+    localStorage.setItem("authorWorks", JSON.stringify(authorWorks));
+    bookEditions = savedSearches[storageID].bookEditions
+    localStorage.setItem("bookEditions", JSON.stringify(bookEditions));
+    editionStatus = savedSearches[storageID].editionStatus
+    localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
+
+      bookStatus = savedSearches[storageID].editionStatus.openLibrary.bookstatus;
+      var mainUpdate = $(mainEl)
+      bookResultsEl.innerHTML = ""
+      var bookResultsUpdate = $(bookResultsEl)
+      bookResultsUpdate.innerHTML = ""
+        if (document.querySelector("#breadcrumb")) {
+          var breadCrumbNav = document.querySelector("#breadcrumb")
+          breadCrumbNav.remove()
+        } 
+        if (document.querySelector("#save-results")) {
+          var saveResultsEl = document.querySelector("#save-results");
+          saveResultsEl.remove()
+        } 
+        
+        breadCrumbNav = $("<div>")
+        .attr("id", "breadcrumb")
+        breadCrumbNavList = $("<ol>")
+        .addClass("breadcrumb")
+        var breadCrumbNavListAuthor = $("<li>")
+        var authorLink = $("<a>")
+        .text(savedSearches[storageID].authorWorks.authorName)
+        .attr("id", "author-name")
+        .attr("href", "#")
+        breadCrumbNavListAuthor.append(authorLink)
+        breadCrumbNav.append(breadCrumbNavList)
+        bookResultsUpdate.before(breadCrumbNav)
+        var breadCrumbNavListBook = $("<li>")
+        var bookLink = $("<a>")
+        .text(savedSearches[storageID].bookEditions.workName)
+        .attr("id", "book-name")
+        .attr("href", "#")
+        breadCrumbNavListBook.append(bookLink)
+        var breadCrumbNavListEdition = $("<li>")
+        var editionLink = $("<a>")
+        .text(savedSearches[storageID].editionStatus.editionName)
+        .attr("id", "edition-name")
+        .attr("href", "#")
+        breadCrumbNavListEdition.append(editionLink)
+        breadCrumbNavList.append(breadCrumbNavListAuthor, breadCrumbNavListBook, breadCrumbNavListEdition)
+        authorLink.on("click", breadCrumbLinkHandler);        
+        bookLink.on("click", breadCrumbLinkHandler);
+        var bookTitleEl = $("<h3>")
+        .text(savedSearches[storageID].editionStatus.editionName)
+        var openLibraryAvailability = $("<h4>")
+        .text("Open Library")
+        var openLibraryLink = $("<a>")
+        openLibraryLink
+        .attr("dataOL-link", savedSearches[storageID].editionStatus.openLibrary.booklink)
+        .attr("href", savedSearches[storageID].editionStatus.openLibrary.booklink)
+        .text("(See on Open Library)")
+        var openLibraryEl = $("<p>")
+        if (bookStatus === "noview") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "noview")
+          .text("not available")
+          .addClass("open-library")
+        } else if (bookStatus === "borrow") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "borrow")
+          .text("available to borrow")
+          .addClass("open-library")
+        } else if (bookStatus === "full") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "full")
+          .text("freely available")
+          .addClass("open-library")
+        } else if (bookStatus === "restricted") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "restricted")
+          .text("restricted to users with a disability")
+          .addClass("open-library")
+        }
+        openLibraryEl
+        .append("This book is ", openLibraryStatus, ". ", openLibraryLink)
+
+        var libraryThing = $("<h4>")
+        .text("Library Thing")
+        .attr("id", "library-thing")
+        .attr("data-bookID", savedSearches[storageID].editionStatus.libraryThing.bookID)
+
+        if (savedSearches[storageID].editionStatus.libraryThing.bookID) {
+          libraryID = savedSearches[storageID].editionStatus.libraryThing.bookID
+          var libraryThingData = $("<p>")
+          .attr("id", "LT_" + libraryID)
+          var libraryThingDataCopies = $("<span>")
+          libraryThingDataCopies
+          .attr("data-copies", savedSearches[storageID].editionStatus.libraryThing.bookcopies)
+          .attr("id", "data-copies")
+          .text(savedSearches[storageID].editionStatus.libraryThing.bookcopies)
+          .addClass("library-thing")
+          var libraryThingDataReviews = $("<span>")
+          libraryThingDataReviews
+          .attr("data-reviews", savedSearches[storageID].editionStatus.libraryThing.bookreviews)
+          .text(savedSearches[storageID].editionStatus.libraryThing.bookreviews)
+          .addClass("library-thing")
+          var libraryThingDataRating = $("<span>")
+          libraryThingDataRating
+          .attr("data-rating", savedSearches[storageID].editionStatus.libraryThing.bookrating)
+          .text(savedSearches[storageID].editionStatus.libraryThing.bookrating)
+          .addClass("library-thing")
+          var libraryThingDataLink = $("<a>")
+          libraryThingDataLink
+          .attr("data-link", savedSearches[storageID].editionStatus.libraryThing.booklink)
+          .attr("href", savedSearches[storageID].editionStatus.libraryThing.booklink)
+          .text("(See on LibraryThing)")
+          libraryThingData
+          .append(libraryThingDataCopies , " members have this book with " , libraryThingDataReviews , " reviews. It has a rating of " , libraryThingDataRating , ". " , libraryThingDataLink) 
+        }
+          // editionLink.on("click", breadCrumbLinkHandler);
+        } 
+
+        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, openLibraryEl, libraryThing);
+        bookResultsUpdate.append(libraryThingData)
+
+        
+        if (document.querySelector("#start-over-form")) {
+          var startOverForm = document.querySelector("#start-over-form")
+          startOverForm.innerHTML = ''
+        } 
+
+        var startOverForm = $("<form>")
+        startOverForm
+        .attr("id", "start-over-form")
+        .addClass("card-body")
+        var startOverButton = $("<button>")
+        startOverButton
+        .attr("id", "start-over-button")
+        .addClass("myButton")
+        .text("Start Over")
+        startOverForm.append(startOverButton)
+        var saveResultsEl = $("<div>")
+        saveResultsEl
+        .attr("id", "save-results")
+        .addClass("card")
+        saveResultsEl.append(startOverForm)
+        startOverForm.on("submit", startOver);
+        mainUpdate.append(saveResultsEl)
+
+        }
+
+        var getSearch = function () {
+  if (localStorage.getItem("savedSearches")) {
+  savedSearches = JSON.parse(localStorage.getItem("savedSearches"));
+  var savedItemsHeader = $("<h2>")
+  savedItemsHeader
+  .addClass("card-header text-uppercase")
+  .text("Past Searches")
+  var savedItemsForm = $("<form>")
+  savedItemsForm
+  .attr("id", "saved-items-form")
+  for (let i = 0; i < savedSearches.length; i++) {
+    var newSavedItems = $("<button>")
+    newSavedItems
+    .addClass("myButton")
+    .attr("data-storage-item", i)
+    .append(savedSearches[i].authorWorks.authorName, " - ", savedSearches[i].bookEditions.workName, " - ", savedSearches[i].editionStatus.editionName)  
+    savedItemsForm.append(newSavedItems)
+  }
+  var clearItemsForm = $("<form>")
+  clearItemsForm
+  .attr("id", "clear-items-form")
+  var clearSearchButton = $("<button>")
+  clearSearchButton
+  .addClass("myButton")
+  .text("Clear Search Results")
+  clearItemsForm.append(clearSearchButton)
+  var savedItemsElUpdate = $(savedItemsEl)
+  savedItemsElUpdate.append(savedItemsHeader, savedItemsForm, clearItemsForm)
+  savedItemsForm.on("click", getSavedItem);
+  clearItemsForm.on("submit", clearSearchForm);
+  }
+}
+
+var saveSearch = function (event) {
+  event.preventDefault();
+  authorWorks = JSON.parse(localStorage.getItem("authorWorks"));
+  bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
+  editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
+
+  savedItem = {authorWorks, bookEditions, editionStatus}
+
+  if (localStorage.getItem("savedSearches")) {
+    savedSearches = JSON.parse(localStorage.getItem("savedSearches"));
+    savedSearches.unshift(savedItem)
+    if (savedSearches.length > 9) {
+      savedSearches.length[10].remove()
+    }
+    localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
+    } else {
+      savedItemStorage = []
+      savedItem = {authorWorks, bookEditions, editionStatus}
+      savedItemStorage.unshift(savedItem)
+      localStorage.setItem("savedSearches", JSON.stringify(savedItemStorage));
+    }
+}
+
+var startOver = function () {
+bookResultsEl.innerHTML = ''
+}
 
 function LT_link (booksInfo) {
-
-  console.log(booksInfo);
-for (i in booksInfo)
+  var libraryThingEl = document.querySelector("#library-thing");
+  var libraryID = $(libraryThingEl)
+  var librarybookID = libraryID.attr("data-bookID")
+  for (i in booksInfo)
 	{
-	try {
-		var book = booksInfo[i];
-		if(book.link)
+    try {
+      var book = booksInfo[librarybookID];
+      if(book.link)
 			{
-      document.getElementById(Library-Thing).innerText = "There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." 
-			document.getElementById('LT_'+book.id).innerHTML = '(<a href="' + book.link + '">see on LibraryThing</a>)';
+        var libraryThingDataCopies = $("<span>")
+        libraryThingDataCopies
+        .attr("data-copies", book.copies)
+        .attr("id", "data-copies")
+        .text(book.copies)
+        .addClass("library-thing")
+        var libraryThingDataReviews = $("<span>")
+        libraryThingDataReviews
+        .attr("data-reviews", book.reviews)
+        .text(book.reviews)
+        .addClass("library-thing")
+        var libraryThingDataRating = $("<span>")
+        libraryThingDataRating
+        .attr("data-rating", book.rating)
+        .text(book.rating)
+        .addClass("library-thing")
+        var libraryThingDataLink = $("<a>")
+        libraryThingDataLink
+        .attr("data-link", book.link)
+        .attr("href", book.link)
+        .text("(See on LibraryThing)")
+        var libraryIDEL = document.getElementById('LT_'+book.id);
+        var libraryIDELUpdate = $(libraryIDEL)
+        libraryIDELUpdate
+        .append(libraryThingDataCopies , " members have this book with " , libraryThingDataReviews , " reviews. It has a rating of " , libraryThingDataRating , ". " , libraryThingDataLink)
 			}
+      editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
+      editionStatus.libraryThing.bookID = book.id
+      editionStatus.libraryThing.bookcopies = book.copies
+      editionStatus.libraryThing.bookreviews = book.reviews
+      editionStatus.libraryThing.bookrating = book.rating
+      editionStatus.libraryThing.booklink = book.link
+      localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
 		}
 	catch(e) { };
 	}
@@ -52,44 +311,83 @@ var getBookInfo = function(event) {
   if (target.is("a")) {
   bookID = event.target.getAttribute("data-OLID")
   libraryID = event.target.getAttribute("data-ISBN")
+  newBookID = libraryID
   bookEdition = event.target.innerText
   var editionStatus = {
     editionName: [],
-    openLibrary: [],
-    goodReads: [],
-    googleBooks: []
+    openLibrary: {
+      bookID: null,
+      bookstatus: null,
+      booklink: null
+    },
+    libraryThing: {
+      bookID: null,
+      bookcopies: null,
+      bookreviews: null,
+      bookrating: null,
+      booklink: null
+    },
     }
     editionStatus.editionName.push(bookEdition)
-  // var apiUrl = "https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json";
   var apiUrl = "https://noahs-server-proj1.herokuapp.com/https://openlibrary.org/api/volumes/brief/olid/" + bookID + ".json"
 
   fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        console.log(data);
-        bookPublisher = data.records["/books/" + bookID].data.publishers[0].name
-        bookDate = data.records["/books/" + bookID].publishDates
+        // console.log(data);
+        // bookPublisher = data.records["/books/" + bookID].data.publishers[0].name
+        // bookDate = data.records["/books/" + bookID].publishDates
         bookStatus = data.records["/books/" + bookID].details.preview;
         bookResultsEl.innerHTML = ""
-
-        editionStatus.openLibrary.push(bookStatus)
+        var mainUpdate = $(mainEl)
         var bookResultsUpdate = $(bookResultsEl)
         var bodyUpdate = $(bodyEl)
         var bookTitleEl = $("<h3>")
         .text(bookEdition.replaceAll("+", " "))
         var openLibraryAvailability = $("<h4>")
         .text("Open Library")
-        var openLibraryStatus = $("<p>")
-        .text(bookStatus)
-        openLibraryAvailability.append(openLibraryStatus)
-        var goodReads = $("<h4>")
-        .text("Good Reads")
+        var openLibraryLink = $("<a>")
+        openLibraryLink
+        .attr("dataOL-link", data.records["/books/" + bookID].details.info_url)
+        .attr("href", data.records["/books/" + bookID].details.info_url)
+        .text("(See on Open Library)")
+        editionStatus.openLibrary.bookID = bookID
+        editionStatus.openLibrary.bookstatus = bookStatus
+        editionStatus.openLibrary.booklink = data.records["/books/" + bookID].details.info_url
+        var openLibraryEl = $("<p>")
+        if (bookStatus === "noview") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "noview")
+          .text("not available")
+          .addClass("open-library")
+        } else if (bookStatus === "borrow") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "borrow")
+          .text("available to borrow")
+          .addClass("open-library")
+        } else if (bookStatus === "full") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "full")
+          .text("freely available")
+          .addClass("open-library")
+        } else if (bookStatus === "restricted") {
+          var openLibraryStatus = $("<span>")
+          openLibraryStatus
+          .attr("data-status", "restricted")
+          .text("restricted to users with a disability")
+          .addClass("open-library")
+        }
+        openLibraryEl
+        .append("This book is ", openLibraryStatus, ". ", openLibraryLink)
         var libraryThing = $("<h4>")
         .text("Library Thing")
+        .attr("id", "library-thing")
+        .attr("data-bookID", libraryID)
         var libraryThingData = $("<p>")
-        .attr("id", "Library-Thing")
-        var libraryThingLink = $("<span>")
         .attr("id", "LT_" + libraryID)
         var breadCrumbNavListEdition = $("<li>")
         var editionLink = $("<a>")
@@ -98,16 +396,42 @@ var getBookInfo = function(event) {
         .attr("href", "#")
         breadCrumbNavListEdition.append(editionLink)
         breadCrumbNavList.append(breadCrumbNavListEdition)
+        // editionLink.on("click", breadCrumbLinkHandler);
+        var saveResultsEl = $("<div>")
+        saveResultsEl
+        .attr("id", "save-results")
+        .addClass("card")
+        var saveResultsForm = $("<form>")
+        saveResultsForm
+        .attr("id", "save-form")
+        .addClass("card-body")
+        var saveResultsButton = $("<button>")
+        saveResultsButton
+        .attr("id", "save-results-button")
+        .addClass("myButton")
+        .text("Save Search Results")
+        var startOverForm = $("<form>")
+        startOverForm
+        .attr("id", "start-over-form")
+        .addClass("card-body")
+        var startOverButton = $("<button>")
+        startOverButton
+        .attr("id", "start-over-button")
+        .addClass("myButton")
+        .text("Start Over")
+        saveResultsForm.append(saveResultsButton)
+        startOverForm.append(startOverButton)
+        saveResultsEl.append(saveResultsForm, startOverForm)
+        saveResultsForm.on("submit", saveSearch);
+        startOverForm.on("submit", startOver);
+        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, openLibraryEl, libraryThing);
+        mainUpdate.append(saveResultsEl)
         localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
-        editionLink.on("click", breadCrumbLinkHandler);
-        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, goodReads, libraryThing);
         if (libraryID) {
-          libraryThing.append(libraryThingData, libraryThingLink)
+          bookResultsUpdate.append(libraryThingData)
           var libraryJS = $("<script>")
-          // .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID)
           .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
           bodyUpdate.append(libraryJS);
-          // libraryThingData.text("There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." )
         }
       });
     } else {
@@ -126,6 +450,7 @@ var getBookAvailability = function(event) {
   var target = $( event.target );
   if (target.is("a")) {
   var bookEditions = {
+    workName: null,
     editionName: [],
     editionID: [],
     bookNumber: [],
@@ -146,7 +471,7 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        console.log(data);
+        // console.log(data);
         bookResultsEl.innerHTML = ""
         var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
@@ -203,6 +528,7 @@ fetch(apiUrl)
           bookLinkEl.attr("data-OLID", bookID)
           bookLinkEl.attr("href", "#")
           bookLinkEl.text(bookPublisher + " (" + bookDate + ") " + editionNumber + " edition " + "(" + bookNumberType + ")")
+          bookEditions.workName = bookName.replaceAll("+", " ")
           bookEditions.bookNumber.push(bookNumber)
           bookEditions.goodReadsID.push(goodReadsID)
           bookEditions.editionName.push(bookLinkEl.text())
@@ -318,7 +644,12 @@ var formSubmitHandler = function(event) {
   // console.log(authorWorks.authorName);
   authorWorks.authorID = authorKey
   // if (!bookAuthor) {
+    if (!author) {
+      authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
+      bookAuthor = authorWorks.authorName
+    } else {
   bookAuthor = author.toLowerCase().replaceAll(" ", "+")
+    }
   // }
   var apiUrl = "https://openlibrary.org/authors/" + authorKey + "/works.json?limit=10&offset=" + authorIndex;
 fetch(apiUrl)
@@ -424,6 +755,7 @@ fetch(apiUrl)
     if (link === "author-name") {
       $('#book-name').parent().remove()
       $('#edition-name').parent().remove()
+      $('#save-results').remove()
       authorWorks = JSON.parse(localStorage.getItem("authorWorks"));
 
       var bookResultsUpdate = $(bookResultsEl)
@@ -476,6 +808,7 @@ fetch(apiUrl)
     }
     if (link === "book-name") {
       $('#edition-name').parent().remove()
+      $('#save-results').remove()
       bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
 
       var bookResultsUpdate = $(bookResultsEl)
@@ -548,3 +881,4 @@ fetch(apiUrl)
 };  
 
 authorFormEl.addEventListener("submit", formSubmitHandler);
+getSearch()
