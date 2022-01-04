@@ -15,14 +15,35 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Find An Author!</title>
   </head>
-  <body id="body">
+  <body id="body" aria-haspopup="alertdialog">
     <header class="hero">
       <h1 class="app-title"><i class="fas fa-book"></i> Find an Author!</h1>
       <p>Get more information about the availability of an author's books!</p>
     </header>
 
+    <div 
+      class="overlay" role="alertdialog" aria-modal="true" 
+      aria-live="assertive" aria-labelledby="modal-title"
+    >
+      <div class="modal">
+        <h1 id="modal-title">Attention:</h1>
+        <p id="modal-message">
+          
+        </p>
+          <p>
+            To close click a button, Escape, or outside this dialog.
+          </p>
+          <button class="close-modal" aria-label="Close">
+            X
+          </button>
+          <button class="close-modal" >
+            Close
+          </button>
+      </div>
+    </div>
+
     <main id="main" class="flex-row justify-space-between">
-      <div class="search-panel">
+      <div id="search" class="search-panel">
         <div class="card">
           <h2 class="card-header text-uppercase">Search By Author</h2>
           <form id="author-form" class="card-body">
@@ -40,9 +61,12 @@
       </div>
       <div id="book-results" class="results-panel"></div>
     </main>
-
+    <footer id="saved-items" class="card">
+      
+    </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="./assets/js/homepage.js"></script>
-    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/modal.js"></script>
+    <script src="./assets/js/inert.min.js"></script>
   </body>
 </html>
