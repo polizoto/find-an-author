@@ -1,0 +1,62 @@
+body {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.7)
+    ),
+    url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8OHx8fGVufDB8fHx8&w=1000&q=80");
+}
+
+.hero {
+  border: solid;
+  text-align: center;
+  background-color: tan;
+  color: black;
+  font-size: 25px;
+}
+
+.info-bar {
+  font-size: 25px;
+  font-style: italic;
+}
+
+.card {
+  text-align: center;
+  font-size: 20px;
+}
+
+.form-input {
+  font-size: 25px;
+}
+
+.myButton {
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+  line-height: 15px;
+  padding: 5px;
+  border-radius: 0px;
+  font-family: Georgia, serif;
+  font-weight: normal;
+  text-decoration: none;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
+  background-image: linear-gradient(
+    to right,
+    rgb(28, 110, 164) 0%,
+    rgb(35, 136, 203) 50%,
+    rgb(20, 78, 117) 100%
+  );
+  box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+  border: 2px solid rgb(28, 110, 164);
+  display: inline-block;
+}
+.myButton:hover {
+  background: #1c6ea4;
+}
+.myButton:active {
+  background: #144e75;
+}
+
+.results-panel {
+  font-size: 20px;
+}

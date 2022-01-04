@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    />
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Find An Author!</title>
-</head>
-<body>
+  </head>
+  <body>
     <header class="hero">
-        <h1 class="app-title"><i class="fas fa-book"></i> Find an Author!</h1>
-        <p>Search for a author or click on a subject to get more information about popular books!
-        </p>
-      </header>
-    
-    
-      <main class="flex-row justify-space-between">
-        <div class="search-panel">
-          <div class="card">
-            <h3 class="card-header text-uppercase">Search By User</h3>
-            <form id="author-form" class="card-body">
-              <label class="form-label" for="author">Author</label>
-              <input name="author" id="author" type="text" autofocus="true" class="form-input" />
-              <button type="submit" class="btn">Get Author</button>
-            </form>
-          </div>
-          <div class="card">
-            <h3 class="card-header text-uppercase">Search By Topic</h3>
-            <div class="card-body" id="language-buttons">
-                <button class="btn" data-language="science-fiction">Science Fiction</button>
-                <button class="btn" data-language="romance">Romance</button>
-                <button class="btn" data-language="mystery">Mystery</button>
-            </div>
-          </div>
+      <h1 class="app-title"><i class="fas fa-book"></i> Find an Author!</h1>
+      <p class="info-bar">
+        Get information about reviews and availability of author's books!
+      </p>
+    </header>
+
+    <main class="flex-row justify-space-between">
+      <div class="search-panel">
+        <div class="card">
+          <h2 class="card-header text-uppercase">Search By Author</h2>
+          <form id="author-form" class="card-body">
+            <input
+              name="author"
+              id="author"
+              type="text"
+              autofocus="true"
+              class="form-input"
+              aria-label="Search"
+            />
+            <button type="submit" class="myButton">Search</button>
+          </form>
         </div>
-        <div class="results-panel">
-          <h2 class="subtitle">Showing Books for: <span id="book-search-term"></span></h2>
-          <div id="books-container" class="list-group">
-            
-          </div>
-        </div>
-      </main>
-      <script src="./assets/js/homepage.js"></script>
-</body>
+      </div>
+      <div id="book-results" class="results-panel"></div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./assets/js/homepage.js"></script>
+    <script src="./assets/js/script.js"></script>
+  </body>
 </html>
