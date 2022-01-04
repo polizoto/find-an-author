@@ -1,4 +1,5 @@
 var mainEl = document.querySelector("#main");
+var bodyEl = document.querySelector("#body");
 var authorFormEl = document.querySelector("#author-form");
 var authorInputEl = document.querySelector("#author");
 var bookResultsEl = document.querySelector("#book-results");
@@ -28,12 +29,29 @@ var onclickArgument = ""
 var breadCrumbNav = ""
 var breadCrumbNavList = ""
 
+function LT_link () {
+  console.log(LT_addLibraryThinglinks());
+  // console.log(book);
+// for (i in booksInfo)
+// 	{
+// 	try {
+// 		var book = booksInfo[i];
+// 		if(book.link)
+// 			{
+//       document.getElementById(Library-Thing).innerText = "There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." 
+// 			document.getElementById('LT_'+book.id).innerHTML = '(<a href="' + book.link + '">see on LibraryThing</a>)';
+// 			}
+// 		}
+// 	catch(e) { };
+// 	}
+}
 
 var getBookInfo = function(event) {
   event.preventDefault();
   var target = $( event.target );
   if (target.is("a")) {
   bookID = event.target.getAttribute("data-OLID")
+  libraryID = event.target.getAttribute("data-ISBN")
   bookEdition = event.target.innerText
   var editionStatus = {
     editionName: [],
@@ -57,6 +75,7 @@ var getBookInfo = function(event) {
 
         editionStatus.openLibrary.push(bookStatus)
         var bookResultsUpdate = $(bookResultsEl)
+        var bodyUpdate = $(bodyEl)
         var bookTitleEl = $("<h3>")
         .text(bookEdition.replaceAll("+", " "))
         var openLibraryAvailability = $("<h4>")
@@ -66,6 +85,12 @@ var getBookInfo = function(event) {
         openLibraryAvailability.append(openLibraryStatus)
         var goodReads = $("<h4>")
         .text("Good Reads")
+        var libraryThing = $("<h4>")
+        .text("Library Thing")
+        var libraryThingData = $("<p>")
+        .attr("id", "Library-Thing")
+        var libraryThingLink = $("<span>")
+        .attr("id", "LT_" + libraryID)
         var breadCrumbNavListEdition = $("<li>")
         var editionLink = $("<a>")
         .text(bookEdition.replaceAll("+", " "))
@@ -75,7 +100,15 @@ var getBookInfo = function(event) {
         breadCrumbNavList.append(breadCrumbNavListEdition)
         localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
         editionLink.on("click", breadCrumbLinkHandler);
-        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, goodReads);
+        bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, goodReads, libraryThing);
+        if (libraryID) {
+          libraryThing.append(libraryThingData, libraryThingLink)
+          var libraryJS = $("<script>")
+          // .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID)
+          .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
+          bodyUpdate.append(libraryJS);
+          // libraryThingData.text("There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." )
+        }
       });
     } else {
       alert("Error: " + bookID + " not found at Open Library");
@@ -94,7 +127,10 @@ var getBookAvailability = function(event) {
   if (target.is("a")) {
   var bookEditions = {
     editionName: [],
-    editionID: []
+    editionID: [],
+    bookNumber: [],
+    goodReadsID: [],
+    editionFullText: []
     }
 
   bookName = event.target.getAttribute("data-book-name")
@@ -124,36 +160,54 @@ fetch(apiUrl)
           var bookInstanceEl = $("<li>")
           var bookLinkEl = $("<a>")
           var bookfullText = $("<span>")
-          if (data.docs[i].isbn) {
-            var bookISBN = data.docs[i].isbn[0]
-            bookLinkEl.attr("data-ISBN", bookISBN) 
-          }
+          // if (data.docs[i].isbn) {
+          //   var bookISBN = data.docs[i].isbn[0]
+          //   bookLinkEl.attr("data-ISBN", bookISBN) 
+          // }
           var bookPublisher = data.docs[i].publisher[0]
           if (bookPublisher.indexOf(',') > -1) 
           {bookPublisher = bookPublisher.substring(1, bookPublisher.indexOf(',')) }
           if (data.docs[i].id_goodreads) {
-            bookLinkEl.attr("data-goodreads", data.docs[i].id_goodreads)
+            var goodReadsID = data.docs[i].id_goodreads
+            bookLinkEl.attr("data-goodreads", goodReadsID)
           }
 
           // getBookInfo(bookID)
 
           bookDate = data.docs[i].publish_year
           editionNumber = data.docs[i].edition_count
-          isbnNumber = data.docs[i].isbn[0]
+          if (data.docs[i].isbn) {
+            bookNumberType = "ISBN: " + data.docs[i].isbn[0]
+            bookNumber = data.docs[i].isbn[0]
+            bookLinkEl.attr("data-ISBN", data.docs[i].isbn[0])
+          } else if (data.docs[i].lccn) {
+            bookNumberType = "LCCN: " + data.docs[i].lccn
+            bookNumber = data.docs[i].lccn
+            bookLinkEl.attr("data-ISBN", data.docs[i].lccn)
+          } else {
+            bookNumberType = "No Record"
+          }
 
           if (data.docs[i].has_fulltext) {
-            fullText = data.docs[i].has_fulltext
+            if (data.docs[i].has_fulltext === "true") {
+              fullText = 	"✔️"
+            } else {
+              fullText = "❌"
+            }
+
           } else {
-            fullText = "false"
+            fullText = "❌"
           }
-          bookfullText.text("( " + fullText + " )")
+          bookfullText.text(" " + fullText)
           
           bookLinkEl.attr("data-OLID", bookID)
-          bookLinkEl.attr("data-status", bookStatus)
           bookLinkEl.attr("href", "#")
-          bookLinkEl.text(bookPublisher + " (" + bookDate + ") " + editionNumber + " edition " + "(ISBN: " + isbnNumber + ")")
+          bookLinkEl.text(bookPublisher + " (" + bookDate + ") " + editionNumber + " edition " + "(" + bookNumberType + ")")
+          bookEditions.bookNumber.push(bookNumber)
+          bookEditions.goodReadsID.push(goodReadsID)
           bookEditions.editionName.push(bookLinkEl.text())
           bookEditions.editionID.push(bookID)
+          bookEditions.editionFullText.push(fullText)
           bookInstanceEl.append(bookLinkEl, bookfullText)
           bookListEl.append(bookInstanceEl)
           bookAvailabilityEl.append(bookListEl)
@@ -435,10 +489,14 @@ fetch(apiUrl)
           var bookID = bookEditions.editionID[i]
           var bookInstanceEl = $("<li>")
           var bookLinkEl = $("<a>")
+          var bookfullText = $("<span>")
           bookLinkEl.attr("data-OLID", bookID)
+          bookLinkEl.attr("data-ISBN", bookEditions.bookNumber[i])
+          bookLinkEl.attr("data-goodreads", bookEditions.goodReadsID[i])
           bookLinkEl.attr("href", "#")
           bookLinkEl.text(bookEditions.editionName[i])
-          bookInstanceEl.append(bookLinkEl)
+          bookfullText.text(" " + bookEditions.editionFullText[i])
+          bookInstanceEl.append(bookLinkEl, bookfullText)
           bookListEl.append(bookInstanceEl)
           bookAvailabilityEl.append(bookListEl)
         }
