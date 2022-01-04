@@ -444,7 +444,7 @@ var getBookInfo = function(event) {
         bookResultsUpdate.append(libraryThingData)
         if (libraryID) {
           var libraryJS = $("<script>")
-          .attr("src", "http://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
+          .attr("src", "https://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
           bodyUpdate.append(libraryJS);
         } else {
           libraryThingData.append("No members have this book!")
