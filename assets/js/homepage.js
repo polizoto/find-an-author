@@ -29,21 +29,21 @@ var onclickArgument = ""
 var breadCrumbNav = ""
 var breadCrumbNavList = ""
 
-function LT_link () {
-  console.log(LT_addLibraryThinglinks());
-  // console.log(book);
-// for (i in booksInfo)
-// 	{
-// 	try {
-// 		var book = booksInfo[i];
-// 		if(book.link)
-// 			{
-//       document.getElementById(Library-Thing).innerText = "There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." 
-// 			document.getElementById('LT_'+book.id).innerHTML = '(<a href="' + book.link + '">see on LibraryThing</a>)';
-// 			}
-// 		}
-// 	catch(e) { };
-// 	}
+function LT_link (booksInfo) {
+
+  console.log(booksInfo);
+for (i in booksInfo)
+	{
+	try {
+		var book = booksInfo[i];
+		if(book.link)
+			{
+      document.getElementById(Library-Thing).innerText = "There are " + book.copies + " members of Library Thing who have " + editionName + " with " + book.reviews + " reviews. The book has a rating of " + book.rating + "." 
+			document.getElementById('LT_'+book.id).innerHTML = '(<a href="' + book.link + '">see on LibraryThing</a>)';
+			}
+		}
+	catch(e) { };
+	}
 }
 
 var getBookInfo = function(event) {
