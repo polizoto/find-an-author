@@ -497,7 +497,7 @@ fetch(apiUrl)
   .then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        // console.log(data);
+        console.log(data);
         bookResultsEl.innerHTML = ""
         var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
@@ -533,9 +533,8 @@ fetch(apiUrl)
             bookNumberType = "No Record"
             bookNumber = "none"
           }
-
           if (data.docs[i].has_fulltext) {
-            if (data.docs[i].has_fulltext === "true") {
+            if (data.docs[i].has_fulltext === true) {
               fullText = 	"✔️"
             } else {
               fullText = "❌"
