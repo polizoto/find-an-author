@@ -176,7 +176,6 @@ var getSavedItem = function (event) {
         bookResultsUpdate.append(bookTitleEl, openLibraryAvailability, openLibraryEl, libraryThing);
         bookResultsUpdate.append(libraryThingData)
 
-        
         if (document.querySelector("#start-over-form")) {
           var startOverForm = document.querySelector("#start-over-form")
           startOverForm.innerHTML = ''
@@ -442,6 +441,7 @@ var getBookInfo = function(event) {
         mainUpdate.append(saveResultsEl)
         localStorage.setItem("editionStatus", JSON.stringify(editionStatus));
         bookResultsUpdate.append(libraryThingData)
+
         if (libraryID) {
           var libraryJS = $("<script>")
           .attr("src", "https://www.librarything.com/api/json/workinfo.js?ids=" + libraryID + "&callback=LT_link")
@@ -559,6 +559,13 @@ fetch(apiUrl)
           bookAvailabilityEl.append(bookListEl)
         }
         bookResultsUpdate.append(bookTitleEl, bookAvailabilityEl);
+
+        var bookResultsKey = $("<p>")
+        bookResultsKey
+        .attr("id", "book-results-key")
+        .text("Full text available: ✔️ (yes) ❌ (no)")
+        bookResultsUpdate.prepend(bookResultsKey)
+
         var breadCrumbNavListBook = $("<li>")
         var bookLink = $("<a>")
         .text(bookName.replaceAll("+", " "))
@@ -898,6 +905,13 @@ fetch(apiUrl)
           bookAvailabilityEl.append(bookListEl)
         }
         bookResultsUpdate.append(bookTitleEl, bookAvailabilityEl);
+
+        var bookResultsKey = $("<p>")
+        bookResultsKey
+        .attr("id", "book-results-key")
+        .text("Full text available: ✔️ (yes) ❌ (no)")
+        bookResultsUpdate.prepend(bookResultsKey)
+
         bookListEl.on("click", getBookInfo);
     }
     if (link === "edition-name") {
