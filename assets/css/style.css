@@ -1,0 +1,15 @@
+.search-panel {
+    border: 3px solid var(--secondary-color);
+    background-color: rgba(252, 225, 56, 0.8);
+    padding: 20px;
+    color: var(--secondary-color);
+    width: 40%;
+    margin: 3.5%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
+.card {
+    font-size: 24px;
+    margin: 0;
+}
