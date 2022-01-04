@@ -545,6 +545,7 @@ fetch(apiUrl)
     .catch(function(error) {
       alert("Unable to connect to Open Library API");
     });
-};  
+};
+
 
 authorFormEl.addEventListener("submit", formSubmitHandler);

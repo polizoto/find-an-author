@@ -22,8 +22,16 @@
           <div class="card">
             <h2 class="card-header text-uppercase">Search By Author</h2>
             <form id="author-form" class="card-body">
-              <input name="author" id="author" type="text" autofocus="true" class="form-input" aria-label="Search"/>
+              <label class="form-label" for="author">Author : </label>
+              <input name="author" id="author" type="text" autofocus="true" class="form-input" />
               <button type="submit" class="btn">Get Author</button>
+            </form>
+            <form>
+              <div class=”search-box”>
+                <label class="form-label" for="author">Book : </label>
+                <input type=”text” class=”search-by-name” name=”name” placeholder=”Search Fourteeners by Name”>
+                <button class=”search-btn” type=”submit”>Search</button>
+               </div>
             </form>
           </div>
         </div>
