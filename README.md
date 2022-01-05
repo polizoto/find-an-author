@@ -14,10 +14,33 @@
 - FINALLY I want to know others peoples ratings and reviews of the book
 
 ## Acceptance Criteria
+- Use a CSS framework other than bootstrap
+- Be deployed to GitHub Pages
+- Be Interactive
+- Use at least two server-side APIs
+- Does not use alerts, confirms, or prompts
+- Use client-side storage to store persistent data
+- Be responsive
+- Have a polished UI
+- Clean repository
+- Quality README
 
 ## Changes Committed
+- Updated Title
+- Added Sorting function for search results
+- Added API calls to Open Library
+- Updated JS to include all subject fields
+- Added pagination and refactored code
+- Added breadcrumb links and local storage capabilities
+- Added ISBN # and Full Text Search
+- Inserted Library Thing API call to HTTPS
+- Updated README file
+
+## Powerpoint
+- 
 
 ## Screenshot
+![screenshot](https://github.com/polizoto/find-an-author/blob/main/assets/photos/Screen%20Shot%202022-01-04%20at%207.57.22%20PM.png)
 
 ## Link to Deployed Application
-
+- https://polizoto.github.io/find-an-author/

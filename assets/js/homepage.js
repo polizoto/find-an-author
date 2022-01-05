@@ -966,7 +966,8 @@ fetch(apiUrl)
       modal.opener = document.activeElement
       openModal()
     });
-};  
+};
+
 
 authorFormEl.addEventListener("submit", formSubmitHandler);
 getSearch()
