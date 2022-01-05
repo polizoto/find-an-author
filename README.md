@@ -37,7 +37,7 @@
 - Updated README file
 
 ## Powerpoint
-- 
+- https://github.com/polizoto/find-an-author/blob/main/assets/powerpoint/Find%20an%20Author.pptx
 
 ## Screenshot
 ![screenshot](https://github.com/polizoto/find-an-author/blob/main/assets/photos/Screen%20Shot%202022-01-04%20at%207.57.22%20PM.png)
