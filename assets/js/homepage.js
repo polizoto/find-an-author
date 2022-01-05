@@ -214,7 +214,7 @@ var getSavedItem = function (event) {
   for (let i = 0; i < savedSearches.length; i++) {
     var newSavedItems = $("<button>")
     newSavedItems
-    .addClass("myButton")
+    .addClass("mySaved")
     .attr("data-storage-item", i)
     .append(savedSearches[i].authorWorks.authorName, " - ", savedSearches[i].bookEditions.workName, " - ", savedSearches[i].editionStatus.editionName)  
     savedItemsForm.append(newSavedItems)
