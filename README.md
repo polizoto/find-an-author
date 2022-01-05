@@ -16,6 +16,18 @@
 ## Acceptance Criteria
 
 ## Changes Committed
+- Updated Title
+- Added Sorting function for search results
+- Added API calls to Open Library
+- Updated JS to include all subject fields
+- Added pagination and refactored code
+- Added breadcrumb links and local storage capabilities
+- Added ISBN # and Full Text Search
+- Inserted Library Thing API call to HTTPS
+- Updated README file
+
+## Powerpoint
+- 
 
 ## Screenshot
 ![screenshot](https://github.com/polizoto/find-an-author/blob/main/assets/photos/Screen%20Shot%202022-01-04%20at%207.57.22%20PM.png)
