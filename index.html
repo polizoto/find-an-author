@@ -8,6 +8,9 @@
       href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap"
       rel="stylesheet"
     />
+          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+          <link type="text/css" rel="stylesheet" href="./assets/css/materialize.css"  media="screen,projection"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
@@ -15,18 +18,19 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Find An Author!</title>
   </head>
-  <body id="body" aria-haspopup="alertdialog">
-    <header class="hero">
+  
+  <body id="body" aria-haspopup="alertdialog" class="container">
+    <header class="hero #212121 #b71c1c red darken-4">
       <h1 class="app-title"><i class="fas fa-book"></i> Find an Author!</h1>
       <p>Get more information about the availability of an author's books!</p>
     </header>
-
+    
     <div 
       class="overlay" role="alertdialog" aria-modal="true" 
       aria-live="assertive" aria-labelledby="modal-title"
     >
       <div class="modal">
-        <h1 id="modal-title">Attention:</h1>
+        <h1 id="modal-title">Alert:</h1>
         <p id="modal-message">
           
         </p>
@@ -41,9 +45,10 @@
           </button>
       </div>
     </div>
+    <main id="main" class="row flex-row justify-space-between card-panel #212121 grey darken-4">
 
-    <main id="main" class="flex-row justify-space-between">
-      <div id="search" class="search-panel">
+
+      <div id="search" class="col s12 search-panel">
         <div class="card">
           <h2 class="card-header text-uppercase">Search By Author</h2>
           <form id="author-form" class="card-body">
@@ -54,19 +59,25 @@
               autofocus="true"
               class="form-input"
               aria-label="Search"
+              style="font-size:40px;"
             />
             <button type="submit" class="myButton">Search</button>
           </form>
         </div>
       </div>
-      <div id="book-results" class="results-panel"></div>
+      <div id="book-results" class="col s12 card-panel"></div>
     </main>
-    <footer id="saved-items" class="card">
+    <div class="row">
       
-    </footer>
+      <footer id="saved-items" class="col s12 card-panel #212121 grey darken-4">
+        
+      </footer>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="./assets/js/homepage.js"></script>
     <script src="./assets/js/modal.js"></script>
     <script src="./assets/js/inert.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
   </body>
 </html>

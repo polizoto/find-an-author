@@ -22,6 +22,7 @@ function openModal(){
 function closeModal(opener){
 	setVisibile(false)
 	setInertBehindModal(false)
+	document.getElementById("search").style.display="block"
 	opener.focus()
 }
 

@@ -35,10 +35,13 @@ var newBookID = ""
 
 var clearSearchForm = function () {
   localStorage.removeItem("savedSearches")
+  var savedItemsEl = $("#saved-items")
+  savedItemsEl.empty()
 }
 
 var getSavedItem = function (event) {
   event.preventDefault();
+  document.getElementById("search").style.display="none"
   var target = $( event.target );
   if (target.is("button")) {
     storageID = event.target.getAttribute("data-storage-item")
@@ -71,6 +74,12 @@ var getSavedItem = function (event) {
         .attr("id", "breadcrumb")
         breadCrumbNavList = $("<ol>")
         .addClass("breadcrumb")
+        var breadCrumbNavListHome = $("<li>")
+        var homeLink = $("<a>")
+        .text("Home")
+        .attr("id", "home")
+        .attr("href", "#")
+        breadCrumbNavListHome.append(homeLink)
         var breadCrumbNavListAuthor = $("<li>")
         var authorLink = $("<a>")
         .text(savedSearches[storageID].authorWorks.authorName)
@@ -81,17 +90,18 @@ var getSavedItem = function (event) {
         bookResultsUpdate.before(breadCrumbNav)
         var breadCrumbNavListBook = $("<li>")
         var bookLink = $("<a>")
-        .text(savedSearches[storageID].bookEditions.workName)
+        .text("Book")
         .attr("id", "book-name")
         .attr("href", "#")
         breadCrumbNavListBook.append(bookLink)
         var breadCrumbNavListEdition = $("<li>")
         var editionLink = $("<a>")
-        .text(savedSearches[storageID].editionStatus.editionName)
+        .text("Edition")
         .attr("id", "edition-name")
         .attr("href", "#")
         breadCrumbNavListEdition.append(editionLink)
-        breadCrumbNavList.append(breadCrumbNavListAuthor, breadCrumbNavListBook, breadCrumbNavListEdition)
+        breadCrumbNavList.append(breadCrumbNavListHome, breadCrumbNavListAuthor, breadCrumbNavListBook, breadCrumbNavListEdition)
+        homeLink.on("click", breadCrumbLinkHandler);    
         authorLink.on("click", breadCrumbLinkHandler);        
         bookLink.on("click", breadCrumbLinkHandler);
         var bookTitleEl = $("<h3>")
@@ -194,7 +204,7 @@ var getSavedItem = function (event) {
         var saveResultsEl = $("<div>")
         saveResultsEl
         .attr("id", "save-results")
-        .addClass("card")
+        // .addClass("card")
         saveResultsEl.append(startOverForm)
         startOverForm.on("submit", startOver);
         mainUpdate.append(saveResultsEl)
@@ -232,10 +242,17 @@ var getSavedItem = function (event) {
   savedItemsForm.on("click", getSavedItem);
   clearItemsForm.on("submit", clearSearchForm);
   }
+  // document.getElementById("search").style.visibility="visible"
 }
 
 var saveSearch = function (event) {
-  // event.preventDefault();
+  bookResultsEl.innerHTML = ''
+  document.getElementById("search").style.display="block"
+  var breadCrumbEl = $("#breadcrumb")
+  breadCrumbEl.remove() 
+  var saveResultsEl = $("#save-results")
+  saveResultsEl.remove()
+
   authorWorks = JSON.parse(localStorage.getItem("authorWorks"));
   bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
   editionStatus = JSON.parse(localStorage.getItem("editionStatus"));
@@ -255,13 +272,22 @@ var saveSearch = function (event) {
       savedItemStorage.unshift(savedItem)
       localStorage.setItem("savedSearches", JSON.stringify(savedItemStorage));
     }
+    var savedItemsEl = $("#saved-items")
+    savedItemsEl.empty()
+    getSearch()
 }
 
 var startOver = function () {
 bookResultsEl.innerHTML = ''
+document.getElementById("search").style.display="block"
+var breadCrumbEl = $("#breadcrumb")
+breadCrumbEl.remove()
+var saveResultsEl = $("#save-results")
+saveResultsEl.remove()
 }
 
 function LT_link (booksInfo) {
+  document.getElementById("search").style.display="none"
   var libraryThingEl = document.querySelector("#library-thing");
   var libraryID = $(libraryThingEl)
   var librarybookID = libraryID.attr("data-bookID")
@@ -323,6 +349,7 @@ function LT_link (booksInfo) {
 
 var getBookInfo = function(event) {
   event.preventDefault();
+  document.getElementById("search").style.display="none"
   var target = $( event.target );
   if (target.is("a")) {
   bookID = event.target.getAttribute("data-OLID")
@@ -405,7 +432,7 @@ var getBookInfo = function(event) {
         .attr("id", "LT_" + libraryID)
         var breadCrumbNavListEdition = $("<li>")
         var editionLink = $("<a>")
-        .text(bookEdition.replaceAll("+", " "))
+        .text("Edition")
         .attr("id", "edition-name")
         .attr("href", "#")
         breadCrumbNavListEdition.append(editionLink)
@@ -413,7 +440,7 @@ var getBookInfo = function(event) {
         var saveResultsEl = $("<div>")
         saveResultsEl
         .attr("id", "save-results")
-        .addClass("card")
+        // .addClass("card")
         var saveResultsForm = $("<form>")
         saveResultsForm
         .attr("id", "save-form")
@@ -473,6 +500,7 @@ var getBookInfo = function(event) {
 
 var getBookAvailability = function(event) {
   event.preventDefault();
+  document.getElementById("search").style.display="none"
   var target = $( event.target );
   if (target.is("a")) {
   var bookEditions = {
@@ -568,7 +596,7 @@ fetch(apiUrl)
 
         var breadCrumbNavListBook = $("<li>")
         var bookLink = $("<a>")
-        .text(bookName.replaceAll("+", " "))
+        .text("Book")
         .attr("id", "book-name")
         .attr("href", "#")
         breadCrumbNavListBook.append(bookLink)
@@ -597,8 +625,8 @@ fetch(apiUrl)
   }
 }
 
-
 var formSubmitHandler = function(event) {
+  document.getElementById("search").style.display="none"
     event.preventDefault();
     $('#breadcrumb').remove()
     var authorname = authorInputEl.value.trim();
@@ -612,10 +640,12 @@ var formSubmitHandler = function(event) {
     modal.callOpen
     modal.opener = document.activeElement
     openModal()
+  
     }
   };
 
   var incrementIndex = function() {
+    document.getElementById("search").style.display="none"
     if (!authorIndex){
     var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
     author = authorWorks.authorName
@@ -627,6 +657,7 @@ var formSubmitHandler = function(event) {
   }
 
   var decrementIndex = function() {
+    document.getElementById("search").style.display="none"
     if (!authorIndex){
       var authorWorks = JSON.parse(localStorage.getItem("authorWorks"))
       author = authorWorks.authorName
@@ -637,6 +668,7 @@ var formSubmitHandler = function(event) {
   }
 
   var getPageNumbers = function(entries, authorIndex, highestOffset) {
+    document.getElementById("search").style.display="none"
     var bookResultsUpdate = $(bookResultsEl)
     if (entries > 10) {
       if (authorIndex === highestOffset) {
@@ -651,7 +683,7 @@ var formSubmitHandler = function(event) {
       var pagesEl = $("<p>")
         .text(startIndex + " to " + endIndex + " of " + entries + " results ")
         var previousLinkEl = $("<span>")
-        .html('<i class="fas fa-angle-left fa-2x"></i>')
+        .html('<i class="medium material-icons">arrow_back</i>')
         .attr('id', 'previous-page')
         if (authorIndex > 0) {
           previousLinkEl.attr('tabindex', "0");
@@ -660,13 +692,14 @@ var formSubmitHandler = function(event) {
           }
         var nextLinkEl = $("<span>")
         .attr('id', 'next-page')
-        .html('<i class="fas fa-angle-right fa-2x"></i>')
+        .html('<i class="medium material-icons">arrow_forward</i>')
         if (authorIndex < highestOffset) {
         nextLinkEl.attr('tabindex', "0");
         nextLinkEl.attr('onclick', 'incrementIndex()')
         nextLinkEl.attr('onkeypress', 'incrementIndex()')
         }
-        pagesEl.append(previousLinkEl, nextLinkEl)
+        pagesEl.prepend(previousLinkEl)
+        pagesEl.append(nextLinkEl)
         pageNavEl.append(pagesEl)
         previousLink = document.getElementById('previous-page');
         nextLink = document.getElementById('next-page');
@@ -691,6 +724,7 @@ var formSubmitHandler = function(event) {
       var authorKey = authorWorks.authorID
       // var authorIndex = authorWorks.authorIndex
     }
+    document.getElementById("search").style.display="none"
     var authorWorks = {
     authorName: null,
     authorID: null,
@@ -784,11 +818,14 @@ fetch(apiUrl)
           bookLink.attr("data-subject-query", bookSubjectQuery)  
           bookTitles.append(bookEl, bookSubjectEl);
         } 
-          var bottomNavEl = document.querySelector("#found-entries");
-          var clone = bottomNavEl.cloneNode(true)
-          clone.setAttribute("id", "bottom-nav")
-          var updateResultsEl = $(bookResultsEl) 
-          updateResultsEl.append(clone)
+        var bottomNavEl = document.querySelector("#found-entries");
+        var clone = bottomNavEl.cloneNode(true)
+        clone.setAttribute("id", "bottom-nav")
+        var updateResultsEl = $(bookResultsEl) 
+        updateResultsEl.append(clone)
+        var authorTitle = $("<h3>")
+        .text(bookAuthor.replaceAll("+", " "))
+        updateResultsEl.prepend(authorTitle)
           localStorage.setItem("authorWorks", JSON.stringify(authorWorks));
           bookContainerEl.addEventListener("click", getBookAvailability);
       });
@@ -816,6 +853,15 @@ fetch(apiUrl)
     event.preventDefault();
     bookResultsEl.innerHTML = ""
     link = event.target.getAttribute("id")
+    if (link === "home") {
+      document.getElementById("search").style.display="block"
+      var breadCrumbEl = $("#breadcrumb")
+      breadCrumbEl.remove()
+      document.getElementById("search").style.display="block"
+      var saveResultsEl = $("#save-results")
+      saveResultsEl.remove()
+      startOver
+    }
     if (link === "author-name") {
       $('#book-name').parent().remove()
       $('#edition-name').parent().remove()
@@ -876,15 +922,18 @@ fetch(apiUrl)
         var updateResultsEl = $(bookResultsEl) 
         updateResultsEl.append(clone)
         bookContainerEl.addEventListener("click", getBookAvailability);
+        var authorTitle = $("<h3>")
+        .text(bookAuthor.replaceAll("+", " "))
+        bookResultsUpdate.prepend(authorTitle)
     }
     if (link === "book-name") {
       $('#edition-name').parent().remove()
       $('#save-results').remove()
       bookEditions = JSON.parse(localStorage.getItem("bookEditions"));
-
+      var bookName = bookEditions.workName
       var bookResultsUpdate = $(bookResultsEl)
         var bookTitleEl = $("<h3>")
-        .text(bookName.replaceAll("+", " "))
+        .text(bookName)
         var bookAvailabilityEl = $("<p>")
         var bookListEl = $("<ol>")
         .attr('id', 'list-editions')
@@ -937,15 +986,22 @@ fetch(apiUrl)
         .attr("id", "breadcrumb")
         breadCrumbNavList = $("<ol>")
         .addClass("breadcrumb")
+        var breadCrumbNavListHome = $("<li>")
+        var homeLink = $("<a>")
+        .text("Home")
+        .attr("id", "home")
+        .attr("href", "#")
+        breadCrumbNavListHome.append(homeLink)
         var breadCrumbNavListAuthor = $("<li>")
         var authorLink = $("<a>")
         .text(author)
         .attr("id", "author-name")
         .attr("href", "#")
         breadCrumbNavListAuthor.append(authorLink)
-        breadCrumbNavList.append(breadCrumbNavListAuthor)
+        breadCrumbNavList.append(breadCrumbNavListHome, breadCrumbNavListAuthor)
         breadCrumbNav.append(breadCrumbNavList)
         bookResultsUpdate.before(breadCrumbNav)
+        homeLink.on("click", breadCrumbLinkHandler);
         authorLink.on("click", breadCrumbLinkHandler);
         displayBooks(author, authorKey, authorIndex);
       });
