@@ -32,7 +32,6 @@ body {
     margin: auto;
     box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
     margin-top: 3.5%;
-    
 }
 
 .card h2 {
@@ -81,6 +80,16 @@ body {
 
 .results-panel {
   font-size: 20px;
+  border: 3px solid var(--secondary-color);
+  background-color: white ;
+  padding: 5px;
+  color: var(--secondary-color);
+  margin: 3.5%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  margin: auto;
+  box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+  margin-top: 3.5%;
 }
 .breadcrumb {
   display: flex;
