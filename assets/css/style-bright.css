@@ -52,6 +52,7 @@ body {
 .form-input {
   font-size: 25px;
   color: var(--accent-color-2);
+  text-align: center;
 }
 
 .myButton {
