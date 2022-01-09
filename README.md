@@ -1,7 +1,4 @@
-#  Project 1
-
-## Project Title
-- Find An Author
+#  Find An Author
 
 ## Description
 - An application that allows users / students to search different categories of books, authors, and their list of titles using HTML, CSS, JS, and third-party APIs. The appplication will also provide features such as if the book is available for purchase, for rent / borrow, or free to download for all users. The user may also narrow down their search by year of publishing, high reviews, previews of each book, and bibliographic information.
@@ -37,11 +34,10 @@
 - Updated README file
 
 ## Powerpoint
-- https://github.com/polizoto/find-an-author/blob/main/assets/powerpoint/Find%20an%20Author.pptx
+- [PowerPoint](https://github.com/polizoto/find-an-author/blob/main/assets/powerpoint/Find%20an%20Author.pptx)
 
 ## Screenshot
-![screenshot](https://github.com/polizoto/find-an-author/blob/main/assets/photos/Screen%20Shot%202022-01-04%20at%207.57.22%20PM.png)
-![screenshot](https://github.com/polizoto/find-an-author/blob/main/assets/photos/Screen%20Shot%202022-01-04%20at%208.55.47%20PM.png)
+![screenshot of Find An Author!](/assets/photos/screenshot.jpg)
 
 ## Link to Deployed Application
-- https://polizoto.github.io/find-an-author/
+- [live application](https://polizoto.github.io/find-an-author/)
