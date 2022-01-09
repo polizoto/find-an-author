@@ -347,3 +347,11 @@ input[type="text"] {
   background: #b71c1c;
   color: white;
 }
+
+.style-adjustment {
+  color: white;
+}
+
+.input-field {
+  background-color: white;
+}

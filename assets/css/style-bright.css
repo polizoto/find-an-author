@@ -1,0 +1,358 @@
+body {
+    background:black
+    }
+    
+    main {
+      font-family: monaco,Consolas,Lucida Console,monospace; 
+  
+  }
+  
+  .hero {
+    font-family: monaco,Consolas,Lucida Console,monospace; 
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-size: 25px;
+  }
+  
+  .info-bar {
+    font-size: 25px;
+    font-style: italic;
+  }
+  
+  .card {
+    text-align: center;
+    font-size: 20px;
+  }
+  
+  .form-input {
+    font-size: 25px;
+  }
+  
+  .myButton {
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+    line-height: 15px;
+    padding: 5px;
+    border-radius: 10px;
+    font-family: Georgia, serif;
+    font-weight: normal;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    background: #000000;
+    border: 2px solid black;
+    display: inline-block;
+  }
+  .myButton:hover {
+    background: white;
+    color: #000000;
+    border: 2px solid black;
+  }
+  .myButton:active {
+    background: white;
+    color: #000000;
+    border: 2px solid black;
+  }
+  
+  .results-panel {
+    font-size: 20px;
+  }
+  
+  
+  .library-thing {
+    font-weight: bold;
+    font-style: italic;
+  }
+  
+  .open-library {
+    font-weight: bold;
+    font-style: italic;
+  }
+  
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(211, 211, 211, 0.8);
+  }
+  
+  .modal {
+    background-color: white;
+    display: inline-block;
+    margin: 20% auto;
+    width: 30%;
+    padding: 1rem;
+    border: 1px solid black;
+  }
+  
+  
+  :focus-visible {
+    box-shadow: 0 0 0 3px rgb(183, 28, 28);
+    background-color: rgb(183, 28, 28);
+  }
+  
+  a:hover {
+    box-shadow: 0 0 0 3px rgb(183, 28, 28);
+    background-color: rgb(183, 28, 28);
+  }
+  
+  #book-results a:hover {
+    box-shadow: 0 0 0 3px rgb(183, 28, 28);
+    background-color: rgb(183, 28, 28);
+  }
+  
+  #author-name {
+    font-size: 30px;
+  }
+  
+  .mySaved {
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+    line-height: 15px;
+    padding: 5px;
+    border-radius: 10px;
+    font-family: Georgia, serif;
+    font-weight: normal;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    display: inline-block;
+  }
+  
+  .mySaved:hover {
+    background: white;
+    color: #000000;
+    border: 2px solid black;
+  }
+  .mySaved:active {
+    background: white;
+    color: #000000;
+    border: 2px solid black;
+  }
+  
+  .mySaved:focus {
+    background: white;
+    color: rgb(183, 28, 28);
+    border: 2px solid black;
+  }
+  
+  .myButton:focus {
+    background: white;
+    color: rgb(183, 28, 28);
+    border: 2px solid black;
+  }
+  
+  #book-name {
+    font-size: 30px;
+  }
+  
+  #edition-name {
+    font-size: 30px;
+  }
+  
+  #breadcrumb {
+    text-align: center;
+  }
+  
+  #breadcrumb ol {
+  list-style: none;
+  display: inline-table;
+  
+  }
+  
+  #breadcrumb ol li {
+  display: inline;
+    }
+  
+  #breadcrumb ol li a {
+    display: block;
+    float: left;
+    height: 50px;
+    background: #000000;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: white;
+    padding: 30px 40px 50px 80px;
+    position: relative;
+    margin: 0 10px 10px 0;
+    font-size: 20px;
+    color: white;
+  }
+  
+  #breadcrumb ol li a:focus {
+    display: block;
+    float: left;
+    height: 50px;
+    background: white;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #000000;
+    font-size: 20px;
+    color: #000000;
+  }
+  
+  #breadcrumb ol li a:after {
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #000000;
+    position: absolute;
+    right: -40px;
+    top: 0;
+    z-index: 1;
+  }
+  
+  #breadcrumb ol li a:after:focus {
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid white;
+    position: absolute;
+    right: -40px;
+    top: 0;
+    z-index: 1;
+  }
+  
+  #breadcrumb ol li a:before {
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #212121;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  
+  #breadcrumb ol li a:before:focus {
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid black;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  
+  #breadcrumb  ol li:first-child a {
+      border-top-left-radius: 10px; border-bottom-left-radius: 10px;
+  }
+  #breadcrumb ol li:first-child a:before {
+      display: none; 
+  }
+  
+  #breadcrumb ol li:last-child a {
+      padding-right: 80px;
+      border-top-right-radius: 10px; border-bottom-right-radius: 10px;
+  }
+  #breadcrumb ol li:last-child a:after {
+      display: none; 
+  }
+  
+  #breadcrumb ol li a:hover {
+      background: white;
+    color: black;
+    border: black;
+    text-decoration: underline;
+    text-decoration-color: #000000;
+  }
+  #breadcrumb ol li a:hover:after {
+          border-left-color: white;
+      color: black;
+      border: black;
+      text-decoration: underline;
+      text-decoration-color: #000000;
+      }
+  
+  #book-results a {
+    color: black;
+    text-decoration: black;
+    text-decoration: underline;
+  }
+  
+  #book-results a:focus {
+    color: white;
+    text-decoration: white;
+    text-decoration: underline;
+  }
+  
+  #book-results a:hover {
+    color: white;
+    text-decoration: white;
+    text-decoration: underline;
+  }
+          
+  #saved-items {
+    color: white;
+  }
+  
+  footer h2 {
+    text-align: center;
+  }
+  
+  #saved-items-form {
+    text-align: center;
+  }
+  
+  #clear-items-form {
+    text-align: center;
+  }
+  
+  .mySaved {
+    padding: 10px;
+    background-color: #b71c1c;
+  
+  }
+  
+  .myButton {
+    padding: 10px;
+    background-color: #b71c1c;
+  
+  }
+  
+  #book-results p {
+    font-size: 30px;
+  }
+  
+    #book-results a:hover {
+    background: #b71c1c;
+    color: white;
+  }   
+  
+  #save-results {
+    text-align: center;
+  }
+  
+  #book-results h4 {
+    font-weight: bold;
+  }
+  
+  input[type="text"] {
+    font-size:50px;
+  }
+  
+  .material-icons:hover {
+    background: #b71c1c;
+    color: white;
+  }
+  
+  .material-icons:focus {
+    background: #b71c1c;
+    color: white;
+  }
+  
+  .style-adjustment {
+    color: white;
+  }
+  
+  .input-field {
+    background-color: white;
+  }
+  

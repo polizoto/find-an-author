@@ -15,7 +15,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link id="change" rel="stylesheet" href="./assets/css/style.css" />
     <title>Find An Author!</title>
   </head>
   
@@ -45,8 +45,17 @@
           </button>
       </div>
     </div>
-    <main id="main" class="row flex-row justify-space-between card-panel #212121 grey darken-4">
+    <div id="selection" class="input-field col s2">
 
+      <select id="select1">
+        <option value="" disabled selected>Mode</option>
+        <option value="1"><a href="#" rel="./assets/css/style-alt.css">Classic</a></option>
+        <option value="2"><a href="#" rel="./assets/css/style.css">Dark</a></option>
+        <option href="#" rel="/path/to/style1.css" value="3">Bright</option>
+      </select>
+    </div>
+    <main id="main" class="row flex-row justify-space-between card-panel #212121 grey darken-4">
+      
 
       <div id="search" class="col s12 search-panel">
         <div class="card">
@@ -78,6 +87,6 @@
     <script src="./assets/js/homepage.js"></script>
     <script src="./assets/js/modal.js"></script>
     <script src="./assets/js/inert.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="./assets/js/materialize.js"></script>
   </body>
 </html>

@@ -1027,3 +1027,29 @@ fetch(apiUrl)
 
 authorFormEl.addEventListener("submit", formSubmitHandler);
 getSearch()
+
+$(document).ready(function(){
+  $('select').formSelect();
+});
+
+$("#select1").on('change', function() {
+  var stylesheetEl = document.getElementById("change");
+  var yourSelect = document.getElementById("select1");
+  var stylesheetSelected = yourSelect.options[yourSelect.selectedIndex].text
+  if (stylesheetSelected === "Classic") {
+    var stylesheetElUpdate = $(stylesheetEl)
+    stylesheetElUpdate
+    .attr("href", "./assets/css/style-alt.css")
+  }
+  if (stylesheetSelected === "Dark") {
+    var stylesheetElUpdate = $(stylesheetEl)
+    stylesheetElUpdate
+    .attr("href", "./assets/css/style.css")
+  }
+  if (stylesheetSelected === "Bright") {
+    var stylesheetElUpdate = $(stylesheetEl)
+    stylesheetElUpdate
+    .attr("href", "./assets/css/style-bright.css")
+  }
+});
+  

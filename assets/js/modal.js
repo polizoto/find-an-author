@@ -14,12 +14,15 @@ const modal = {
 }
 
 function openModal(){
+
+	document.getElementById("selection").style.display="none"
 	setVisibile(true)
 	setFocus()	
 	setInertBehindModal(true)
 }
 
 function closeModal(opener){
+	document.getElementById("selection").style.display="block"
 	setVisibile(false)
 	setInertBehindModal(false)
 	document.getElementById("search").style.display="block"
