@@ -30,14 +30,15 @@ body {
     font-family: var(--primary-font);
   }
 
-  .card-panel {
+.card-panel {
     background-color: var(--materialize-Card);
+    color: var(--secondary-color)
   }
   
 .hero {
   font-family: var(--primary-font);
   text-align: center;
-  background-color: var(--accent-color-1);
+  background-color: var(--accent-color-3);
   color: var(--secondary-color);
   font-size: var(--hero-font-size);
 }
@@ -45,10 +46,12 @@ body {
 .card {
   text-align: center;
   font-size: var(--card-font-size);
+  background-color: var(--primary-color);
 }
 
 .form-input {
   font-size: 25px;
+  color: var(--secondary-color);
 }
 
 .myButton {
@@ -69,9 +72,9 @@ body {
   display: inline-block;
 }
 .myButton:hover {
-  background: var(--secondary-color);
-  color: var(--primary-color);;
-  border: 2px solid var(--primary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
 .myButton:active {
   background: var(--secondary-color);
@@ -115,18 +118,8 @@ body {
 
 
 :focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-color-1);
-  background-color: var(--accent-color-1);
-}
-
-a:hover {
-  box-shadow: 0 0 0 3px var(--accent-color-1);
-  background-color: var(--accent-color-1);
-}
-
-#book-results a:hover {
-  box-shadow: 0 0 0 3px var(--accent-color-1);
-  background-color: var(--accent-color-1);
+  box-shadow: 0 0 0 3px var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 #author-name {
@@ -150,25 +143,25 @@ a:hover {
 }
 
 .mySaved:hover {
-  background: var(--secondary-color);
-  color: var(--primary-color);;
-  border: 2px solid var(--primary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
 .mySaved:active {
-  background: var(--secondary-color);
-  color: var(--primary-color);;
-  border: 2px solid var(--primary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
 
 .mySaved:focus {
-  background: var(--secondary-color);
-  color: var(--accent-color-1);
-  border: 2px solid var(--primary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
 
 .myButton:focus {
-  background: var(--secondary-color);
-  color: var(--accent-color-1);
+  background: var(--primary-color);
+  color: var(--secondary-color);
   border: 2px solid var(--primary-color);
 }
 
@@ -294,13 +287,13 @@ display: inline;
 	}
 
 #book-results a {
-  color: var(--primary-color);
+  color: var(--secondary-color);
   text-decoration: var(--primary-color);
   text-decoration: underline;
 }
 
 #book-results a:focus {
-  color: var(--secondary-color);
+  color: var(--primary-color);
   text-decoration: var(--secondary-color);
   text-decoration: underline;
 }
@@ -329,14 +322,15 @@ footer h2 {
 
 .mySaved {
   padding: 10px;
-  background-color: var(--accent-color-2);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 
 }
 
 .myButton {
   padding: 10px;
-  background-color: var(--accent-color-2);
-
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 #book-results p {
@@ -344,8 +338,8 @@ footer h2 {
 }
 
   #book-results a:hover {
-  background: var(--accent-color-2);
-  color: var(--secondary-color);
+  background: var(--secondary-color);
+  color: var(--primary-color);
 }   
 
 #save-results {
@@ -360,15 +354,42 @@ input[type="text"] {
   font-size: 50px;
 }
 
-.material-icons:hover {
-  background: var(--accent-color-2);
+#previous-page {
   color: var(--secondary-color);
+  background-color: var(--materialize-Card);  
 }
 
-.material-icons:focus {
-  background: var(--accent-color-2);
+#next-page {
   color: var(--secondary-color);
+  background-color: var(--materialize-Card);  
 }
+
+#previous-page:focus {
+  color: var(--secondary-color);
+  box-shadow: none;
+  background-color: var(--materialize-Card);
+} 
+
+#next-page:focus {
+  color: var(--secondary-color);
+  box-shadow: none;
+  background-color: var(--materialize-Card);
+} 
+
+#previous-page:hover {
+  color: var(--primary-color);
+  background-color: var(--materialize-Card);
+  text-decoration: var(--secondary-color);
+  text-decoration: underline;
+} 
+
+#next-page:hover {
+  color: var(--primary-color);
+  background-color: var(--materialize-Card);
+  text-decoration: var(--secondary-color);
+  text-decoration: underline;
+} 
+
 
 .style-adjustment {
   color: var(--secondary-color);

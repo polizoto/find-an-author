@@ -681,7 +681,7 @@ var formSubmitHandler = function(event) {
         .addClass('card-header')
         .attr('id', 'found-entries')
       var pagesEl = $("<p>")
-        .text(startIndex + " to " + endIndex + " of " + entries + " results ")
+        .text(" " + startIndex + " to " + endIndex + " of " + entries + " results ")
         var previousLinkEl = $("<span>")
         .html('<i class="medium material-icons">arrow_back</i>')
         .attr('id', 'previous-page')
