@@ -1,28 +1,50 @@
+:root {
+  --primary-color: black;
+  --secondary-color: white;
+  --accent-color-1: rgb(183, 28, 28);
+  --accent-color-2: #b71c1c;
+  --accent-color-3: #212121;
+  --background-color: black;
+  --background-accent: rgba(211, 211, 211, 0.8);
+  --primary-font: monaco,Consolas,Lucida Console,monospace; 
+  --breadcrumb-font-size: 20px;
+  --hero-font-size: 25px;
+  --card-font-size: 20px;
+  --myButton-font-size: 20px;
+  --results-font-size: 20px;
+  --mySaved-font-size: 20px;
+  --pageHeading-font-size: 30px;
+  --pageResults-font-size: 30px;
+
+  /* Materialize styles */
+  --materialize-Card: #212121;
+}
+
+
+
 body {
-  background:black
+  background:var(--background-color);
   }
   
   main {
-    font-family: monaco,Consolas,Lucida Console,monospace; 
+    font-family: var(--primary-font);
+  }
 
-}
-
+  .card-panel {
+    background-color: var(--materialize-Card);
+  }
+  
 .hero {
-  font-family: monaco,Consolas,Lucida Console,monospace; 
+  font-family: var(--primary-font);
   text-align: center;
-  background-color: black;
-  color: white;
-  font-size: 25px;
-}
-
-.info-bar {
-  font-size: 25px;
-  font-style: italic;
+  background-color: var(--accent-color-1);
+  color: var(--secondary-color);
+  font-size: var(--hero-font-size);
 }
 
 .card {
   text-align: center;
-  font-size: 20px;
+  font-size: var(--card-font-size);
 }
 
 .form-input {
@@ -30,35 +52,35 @@ body {
 }
 
 .myButton {
-  color: white;
-  font-size: 20px;
+  color: var(--secondary-color);
+  font-size: var(--myButton-font-size);
   margin: 10px;
   line-height: 15px;
   padding: 5px;
   border-radius: 10px;
-  font-family: Georgia, serif;
+  font-family: var(--primary-font);
   font-weight: normal;
   text-decoration: none;
   font-style: normal;
   font-variant: normal;
   text-transform: none;
-  background: #000000;
-  border: 2px solid black;
+  background: var(--primary-color);;
+  border: 2px solid var(--primary-color);
   display: inline-block;
 }
 .myButton:hover {
-  background: white;
-  color: #000000;
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--primary-color);;
+  border: 2px solid var(--primary-color);
 }
 .myButton:active {
-  background: white;
-  color: #000000;
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--primary-color);;
+  border: 2px solid var(--primary-color);
 }
 
 .results-panel {
-  font-size: 20px;
+  font-size: var(--results-font-size);
 }
 
 
@@ -79,46 +101,46 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(211, 211, 211, 0.8);
+  background-color: var(--background-accent);
 }
 
 .modal {
-  background-color: white;
+  background-color: var(--secondary-color);
   display: inline-block;
   margin: 20% auto;
   width: 50%;
   padding: 1rem;
-  border: 1px solid black;
+  border: 1px solid var(--primary-color);
 }
 
 
 :focus-visible {
-  box-shadow: 0 0 0 3px rgb(183, 28, 28);
-  background-color: rgb(183, 28, 28);
+  box-shadow: 0 0 0 3px var(--accent-color-1);
+  background-color: var(--accent-color-1);
 }
 
 a:hover {
-  box-shadow: 0 0 0 3px rgb(183, 28, 28);
-  background-color: rgb(183, 28, 28);
+  box-shadow: 0 0 0 3px var(--accent-color-1);
+  background-color: var(--accent-color-1);
 }
 
 #book-results a:hover {
-  box-shadow: 0 0 0 3px rgb(183, 28, 28);
-  background-color: rgb(183, 28, 28);
+  box-shadow: 0 0 0 3px var(--accent-color-1);
+  background-color: var(--accent-color-1);
 }
 
 #author-name {
-  font-size: 30px;
+  font-size: var(--pageHeading-font-size);
 }
 
 .mySaved {
-  color: white;
-  font-size: 20px;
+  color: var(--secondary-color);
+  font-size: var(--results-font-size);
   margin: 10px;
   line-height: 15px;
   padding: 5px;
   border-radius: 10px;
-  font-family: Georgia, serif;
+  font-family: var(--primary-font);
   font-weight: normal;
   text-decoration: none;
   font-style: normal;
@@ -128,34 +150,34 @@ a:hover {
 }
 
 .mySaved:hover {
-  background: white;
-  color: #000000;
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--primary-color);;
+  border: 2px solid var(--primary-color);
 }
 .mySaved:active {
-  background: white;
-  color: #000000;
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--primary-color);;
+  border: 2px solid var(--primary-color);
 }
 
 .mySaved:focus {
-  background: white;
-  color: rgb(183, 28, 28);
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--accent-color-1);
+  border: 2px solid var(--primary-color);
 }
 
 .myButton:focus {
-  background: white;
-  color: rgb(183, 28, 28);
-  border: 2px solid black;
+  background: var(--secondary-color);
+  color: var(--accent-color-1);
+  border: 2px solid var(--primary-color);
 }
 
 #book-name {
-  font-size: 30px;
+  font-size: var(--pageHeading-font-size);
 }
 
 #edition-name {
-  font-size: 30px;
+  font-size: var(--pageHeading-font-size);
 }
 
 #breadcrumb {
@@ -176,34 +198,34 @@ display: inline;
   display: block;
   float: left;
   height: 50px;
-  background: #000000;
+  background: var(--primary-color);;
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: white;
+  text-decoration-color: var(--secondary-color);
   padding: 30px 40px 50px 80px;
   position: relative;
   margin: 0 10px 10px 0;
-  font-size: 20px;
-  color: white;
+  font-size: var(--breadcrumb-font-size);
+  color: var(--secondary-color);
 }
 
 #breadcrumb ol li a:focus {
   display: block;
   float: left;
   height: 50px;
-  background: white;
+  background: var(--secondary-color);
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: #000000;
-  font-size: 20px;
-  color: #000000;
+  text-decoration-color: var(--primary-color);;
+  font-size: var(--breadcrumb-font-size);
+  color: var(--primary-color);;
 }
 
 #breadcrumb ol li a:after {
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid #000000;
+  border-left: 40px solid var(--primary-color);;
   position: absolute;
   right: -40px;
   top: 0;
@@ -214,7 +236,7 @@ display: inline;
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid white;
+  border-left: 40px solid var(--secondary-color);
   position: absolute;
   right: -40px;
   top: 0;
@@ -225,7 +247,7 @@ display: inline;
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid #212121;
+  border-left: 40px solid var(--accent-color-3);
   position: absolute;
   left: 0;
   top: 0;
@@ -235,7 +257,7 @@ display: inline;
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid black;
+  border-left: 40px solid var(--primary-color);
   position: absolute;
   left: 0;
   top: 0;
@@ -257,40 +279,40 @@ display: inline;
 }
 
 #breadcrumb ol li a:hover {
-	background: white;
-  color: black;
-  border: black;
+	background: var(--secondary-color);
+  color: var(--primary-color);
+  border: var(--primary-color);
   text-decoration: underline;
-  text-decoration-color: #000000;
+  text-decoration-color: var(--primary-color);;
 }
 #breadcrumb ol li a:hover:after {
-		border-left-color: white;
-    color: black;
-    border: black;
+		border-left-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: var(--primary-color);
     text-decoration: underline;
-    text-decoration-color: #000000;
+    text-decoration-color: var(--primary-color);;
 	}
 
 #book-results a {
-  color: black;
-  text-decoration: black;
+  color: var(--primary-color);
+  text-decoration: var(--primary-color);
   text-decoration: underline;
 }
 
 #book-results a:focus {
-  color: white;
-  text-decoration: white;
+  color: var(--secondary-color);
+  text-decoration: var(--secondary-color);
   text-decoration: underline;
 }
 
 #book-results a:hover {
-  color: white;
-  text-decoration: white;
+  color: var(--secondary-color);
+  text-decoration: var(--secondary-color);
   text-decoration: underline;
 }
         
 #saved-items {
-  color: white;
+  color: var(--secondary-color);
 }
 
 footer h2 {
@@ -307,23 +329,23 @@ footer h2 {
 
 .mySaved {
   padding: 10px;
-  background-color: #b71c1c;
+  background-color: var(--accent-color-2);
 
 }
 
 .myButton {
   padding: 10px;
-  background-color: #b71c1c;
+  background-color: var(--accent-color-2);
 
 }
 
 #book-results p {
-  font-size: 30px;
+  font-size: var(--pageResults-font-size);
 }
 
   #book-results a:hover {
-  background: #b71c1c;
-  color: white;
+  background: var(--accent-color-2);
+  color: var(--secondary-color);
 }   
 
 #save-results {
@@ -335,23 +357,32 @@ footer h2 {
 }
 
 input[type="text"] {
-  font-size:50px;
+  font-size: 50px;
 }
 
 .material-icons:hover {
-  background: #b71c1c;
-  color: white;
+  background: var(--accent-color-2);
+  color: var(--secondary-color);
 }
 
 .material-icons:focus {
-  background: #b71c1c;
-  color: white;
+  background: var(--accent-color-2);
+  color: var(--secondary-color);
 }
 
 .style-adjustment {
-  color: white;
+  color: var(--secondary-color);
 }
 
 .input-field {
-  background-color: white;
+  background-color: var(--secondary-color);
+}
+
+.select-wrapper ul {
+  background-color: var(--secondary-color);
+
+}
+
+.select-wrapper li span {
+  color: var(--primary-color);
 }
