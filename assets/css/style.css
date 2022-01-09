@@ -43,6 +43,25 @@ body {
   font-size: var(--hero-font-size);
 }
 
+/* */
+.search-panel {
+    border: 3px solid var(--secondary-color);
+    background-color: #0D5F8A ;
+    padding: 5px;
+    color: var(--secondary-color);
+    width: 40%;
+    margin: 3.5%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    margin: auto;
+    box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+    margin-top: 3.5%;
+}
+
+.card h2 {
+    color: white;
+}
+
 .card {
   text-align: center;
   font-size: var(--card-font-size);
@@ -408,3 +427,4 @@ input[type="text"] {
 .select-wrapper li span {
   color: var(--primary-color);
 }
+
