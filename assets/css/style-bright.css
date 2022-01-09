@@ -1,10 +1,10 @@
 :root {
-  --primary-color: black;
-  --secondary-color: white;
+  --primary-color: white;
+  --secondary-color: black;
   --accent-color-1: rgb(183, 28, 28);
-  --accent-color-2: #b71c1c;
-  --accent-color-3: #212121;
-  --background-color: black;
+  --accent-color-2: #1a237e;
+  --accent-color-3: #fffde7;
+  --background-color: #fff176;
   --background-accent: rgba(211, 211, 211, 0.8);
   --primary-font: monaco,Consolas,Lucida Console,monospace; 
   --breadcrumb-font-size: 20px;
@@ -17,7 +17,7 @@
   --pageResults-font-size: 30px;
 
   /* Materialize styles */
-  --materialize-Card: #212121;
+  --materialize-Card: #fffde7;
 }
 
 
@@ -32,14 +32,14 @@ body {
 
 .card-panel {
     background-color: var(--materialize-Card);
-    color: var(--secondary-color)
+    color: var(--accent-color-2)
   }
   
 .hero {
   font-family: var(--primary-font);
   text-align: center;
   background-color: var(--accent-color-3);
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   font-size: var(--hero-font-size);
 }
 
@@ -51,7 +51,7 @@ body {
 
 .form-input {
   font-size: 25px;
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
 }
 
 .myButton {
@@ -72,12 +72,12 @@ body {
   display: inline-block;
 }
 .myButton:hover {
-  background: var(--primary-color);
+  background: var(--background-color);
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
 }
 .myButton:active {
-  background: var(--secondary-color);
+  background: var(--background-color);
   color: var(--primary-color);;
   border: 2px solid var(--primary-color);
 }
@@ -119,7 +119,7 @@ body {
 
 :focus-visible {
   box-shadow: 0 0 0 3px var(--secondary-color);
-  background-color: var(--secondary-color);
+  background-color: var(--background-color);
 }
 
 #author-name {
@@ -143,7 +143,7 @@ body {
 }
 
 .mySaved:hover {
-  background: var(--primary-color);
+  background: var(--background-color);
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
 }
@@ -154,13 +154,13 @@ body {
 }
 
 .mySaved:focus {
-  background: var(--primary-color);
+  background: var(--background-color);
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
 }
 
 .myButton:focus {
-  background: var(--primary-color);
+  background: var(--background-color);
   color: var(--secondary-color);
   border: 2px solid var(--primary-color);
 }
@@ -191,34 +191,34 @@ display: inline;
   display: block;
   float: left;
   height: 50px;
-  background: var(--primary-color);;
+  background: var(--accent-color-2);;
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: var(--secondary-color);
+  text-decoration-color: var(--background-color);
   padding: 30px 40px 50px 80px;
   position: relative;
   margin: 0 10px 10px 0;
   font-size: var(--breadcrumb-font-size);
-  color: var(--secondary-color);
+  color: var(--background-color);
 }
 
 #breadcrumb ol li a:focus {
   display: block;
   float: left;
   height: 50px;
-  background: var(--secondary-color);
+  background: var(--background-color);
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: var(--primary-color);;
+  text-decoration-color: var(--secondary-color);
   font-size: var(--breadcrumb-font-size);
-  color: var(--primary-color);;
+  color: var(--secondary-color);
 }
 
 #breadcrumb ol li a:after {
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid var(--primary-color);;
+  border-left: 40px solid var(--accent-color-2);;
   position: absolute;
   right: -40px;
   top: 0;
@@ -229,7 +229,7 @@ display: inline;
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid var(--secondary-color);
+  border-left: 40px solid var(--background-color);
   position: absolute;
   right: -40px;
   top: 0;
@@ -250,7 +250,7 @@ display: inline;
   content: "";
   border-top: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid var(--primary-color);
+  border-left: 40px solid var(--background-color);
   position: absolute;
   left: 0;
   top: 0;
@@ -272,35 +272,35 @@ display: inline;
 }
 
 #breadcrumb ol li a:hover {
-	background: var(--secondary-color);
-  color: var(--primary-color);
-  border: var(--primary-color);
+	background: var(--background-color);
+  color: var(--accent-color-2);
+  border: var(--accent-color-2);
   text-decoration: underline;
-  text-decoration-color: var(--primary-color);;
+  text-decoration-color: var(--accent-color-2); 
 }
 #breadcrumb ol li a:hover:after {
 		border-left-color: var(--secondary-color);
-    color: var(--primary-color);
-    border: var(--primary-color);
+    color: var(--accent-color-2);
+    border: var(--accent-color-2);
     text-decoration: underline;
-    text-decoration-color: var(--primary-color);;
+    text-decoration-color: var(--accent-color-2);
 	}
 
 #book-results a {
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   text-decoration: var(--primary-color);
   text-decoration: underline;
 }
 
 #book-results a:focus {
-  color: var(--primary-color);
+  color: var(--accent-color-2);
   text-decoration: var(--secondary-color);
   text-decoration: underline;
 }
 
 #book-results a:hover {
-  color: var(--secondary-color);
-  text-decoration: var(--secondary-color);
+  color: var(--accent-color-2);
+  text-decoration: var(--accent-color-2);
   text-decoration: underline;
 }
         
@@ -310,6 +310,7 @@ display: inline;
 
 footer h2 {
   text-align: center;
+  color: var(--accent-color-2);
 }
 
 #saved-items-form {
@@ -322,15 +323,14 @@ footer h2 {
 
 .mySaved {
   padding: 10px;
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-
+  background-color: var(--accent-color-2);
+  color: var(--accent-color-3);
 }
 
 .myButton {
   padding: 10px;
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
+  background-color: var(--accent-color-2);
+  color: var(--accent-color-3);
 }
 
 #book-results p {
@@ -338,8 +338,10 @@ footer h2 {
 }
 
   #book-results a:hover {
-  background: var(--secondary-color);
-  color: var(--primary-color);
+    color: var(--accent-color-2);
+    text-decoration: var(--accent-color-2);
+    background-color: var(--background-color);
+    text-decoration: underline;
 }   
 
 #save-results {
@@ -355,37 +357,37 @@ input[type="text"] {
 }
 
 #previous-page {
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   background-color: var(--materialize-Card);  
 }
 
 #next-page {
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   background-color: var(--materialize-Card);  
 }
 
 #previous-page:focus {
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   box-shadow: none;
   background-color: var(--materialize-Card);
 } 
 
 #next-page:focus {
-  color: var(--secondary-color);
+  color: var(--accent-color-2);
   box-shadow: none;
   background-color: var(--materialize-Card);
 } 
 
 #previous-page:hover {
-  color: var(--primary-color);
-  background-color: var(--materialize-Card);
+  color: var(--background-color);
+  background-color: var(--accent-color-3);
   text-decoration: var(--secondary-color);
   text-decoration: underline;
 } 
 
 #next-page:hover {
-  color: var(--primary-color);
-  background-color: var(--materialize-Card);
+  color: var(--background-color);
+  background-color: var(--accent-color-3);
   text-decoration: var(--secondary-color);
   text-decoration: underline;
 } 
@@ -396,14 +398,14 @@ input[type="text"] {
 }
 
 .input-field {
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color-3);
 }
 
 .select-wrapper ul {
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color-3);
 
 }
 
 .select-wrapper li span {
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
